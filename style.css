@@ -1,0 +1,105 @@
+* {
+    box-sizing: border-box;
+}
+
+
+body{
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #F1F5F9;
+    color: #222222;
+    
+}
+
+.cabecalho{
+    background-color: #1E3A8A;
+    padding: 16px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #d1d5db;
+}
+.cabecalho h2{
+    color: #E0E7FF;
+}
+
+.menu{
+    display:flex;
+    gap:24px;
+}
+
+.menu a{
+    text-decoration: none;
+    color: #E0E7FF;
+    font-weight: bold;
+}
+
+main{
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 0 24px;
+
+}
+
+.titulo{
+    margin-bottom: 30px;
+    color: #1E3A8A;
+}
+
+
+
+.formulario {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 10px;
+    border: 1px solid #d1d5db;
+}
+
+.campo {
+    margin-bottom: 20px;
+}
+
+.campo label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #333333;
+}
+
+.campo input{
+    width: 100%;
+    padding: 11px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 15px;
+}
+.campo select{
+    width: 100%;
+    padding: 11px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 15px;
+}
+.campo textarea {
+    width: 100%;
+    padding: 11px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 15px;
+}
+
+
+button {
+    background-color: #1E3A8A;
+    color: #ffffff;
+    border: none;
+    padding: 12px 22px;
+    border-radius: 6px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+}

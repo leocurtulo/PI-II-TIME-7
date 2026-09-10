@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt_BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nova demanda - Sistema de acompanhamento de Demandas</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header class="cabecalho">
+        <h2>Sistema de Demandas</h2>
+        <nav class="menu">
+            <a href="dashboard-demanda.html">Dashboard</a>
+            <a href="listagem-demandas.html">Demandas</a>
+            <a href="cadastro-demanda.html">Nova demanda</a>
+        </nav>
+    </header>
+    
+    <main>
+        <h1 class="titulo">Cadastrar nova demanda</h1>
+        <p>Preencha os dados abaixo para registrar uma nova demanda.</p>
+
+    
+
+        <form class="formulario">
+            <div class="campo">
+                <label for="titulo">Título</label>
+                <input type="text" id="titulo" name="titulo" required>
+            </div>
+        
+
+            <div class="campo">
+                <label for="descricao">Descrição</label>
+                <textarea id="descricao" name="descricao" required></textarea>
+            </div>
+
+            <div class="campo">
+                <label for="tipo">Tipo da demanda</label>
+                <select id="tipo" name="tipo" required>
+                    <option value="tarefa">Tarefa</option>
+                    <option value="defeito">Defeito</option>
+                    <option value="melhoria">Melhoria</option>
+                    <option value="documentacao">Documentação</option>
+                </select>
+            </div>
+
+            <div class="campo">
+                <label for="prioridade">Prioridade</label>
+                <select id="prioridade" name="prioridade" required>
+                    <option value="critica">Crítica</option>
+                    <option value="alta">Alta</option>
+                    <option value="media">Média</option>
+                    <option value="baixa">Baixa</option>
+
+                </select>
+            </div>
+            
+            <div class="campo">
+                <label for="projeto">Projeto associado</label>
+                <select id="projeto" name="projeto" required>
+                    <option value="projeto-a">Sistema de Acompanhamento de Demandas</option>
+                </select>
+            </div>
+
+            <div class="campo">
+                <label for="responsavel">Responsável</label>
+                <select id="responsavel" name="responsavel">
+                    <option value="">Sem responsável definido</option>
+                </select>
+            </div>
+
+            <div class="campo">
+                <label for="prazo">Prazo de finalização</label>
+                <input type="date" id="prazo" name="prazo">
+            </div>
+
+            <div class="campo">
+                <label for="status">Status</label>
+                <input type="text" id="status" name="status" value="Aberta" disabled>
+            </div>
+
+            <div class="campo">
+                <label for="data-criacao">Data de criação</label>
+                <input type="text" id="data-criacao" name="data-criacao" value="—" disabled>
+            </div>
+
+            <div class="campo">
+                <label for="data-atualizacao">Última atualização</label>
+                <input type="text" id="data-atualizacao" name="data-atualizacao" value="—" disabled>
+            </div>
+
+            <button type="submit">Salvar Demanda</button>
+
+        </form>
+    </main>
+
+</body>
+</html>
