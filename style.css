@@ -103,3 +103,48 @@ button {
     font-weight: bold;
     cursor: pointer;
 }
+
+button:hover {
+    background-color: #3749A3;
+}
+
+.login {
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 10px;
+    border: 1px solid #d1d5db;
+    max-width: 400px;
+    width: 100%;
+    margin: 80px auto; 
+}
+
+.login h2 {
+    margin-bottom: 24px;
+    color: #1E3A8A;
+    text-align: center;
+}
+
+.login form {
+    display: flex;
+    flex-direction: column;
+}
+
+.login label {
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #333333;
+}
+
+.login input {
+    width: 100%;
+    padding: 11px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 15px;
+    margin-bottom: 20px;
+    outline: none; 
+}
+
+
+
