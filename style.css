@@ -189,7 +189,7 @@ button:hover {
     color: #222222;
 }
 
-/* Listas */
+
 
 .painel {
     background-color: #ffffff;
@@ -220,7 +220,7 @@ button:hover {
     border-bottom: none;
 }
 
-/* Tabelas */
+
 
 .tabela-dashboard {
     width: 100%;
@@ -245,13 +245,13 @@ button:hover {
     background-color: #f8fafc;
 }
 
-/* Separação entre seções */
+
 
 .secao-dashboard {
     margin-bottom: 35px;
 }
 
-/* Listagem de demandas */
+
 
 #lista {
     display: block !important;
@@ -275,3 +275,5 @@ button:hover {
     margin: 8px 0;
     color: #555555;
 }
+
+
