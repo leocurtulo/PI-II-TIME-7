@@ -251,4 +251,27 @@ button:hover {
     margin-bottom: 35px;
 }
 
+/* Listagem de demandas */
 
+#lista {
+    display: block !important;
+}
+
+.exemplo {
+    background-color: #ffffff;
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.exemplo h3 {
+    color: #1E3A8A;
+    margin-top: 0;
+    margin-bottom: 15px;
+}
+
+.exemplo p {
+    margin: 8px 0;
+    color: #555555;
+}
