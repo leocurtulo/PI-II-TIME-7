@@ -1,0 +1,254 @@
+* {
+    box-sizing: border-box;
+}
+
+
+body{
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #F1F5F9;
+    color: #222222;
+    
+}
+
+.cabecalho{
+    background-color: #1E3A8A;
+    padding: 16px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #d1d5db;
+}
+.cabecalho h2{
+    color: #E0E7FF;
+}
+
+.menu{
+    display:flex;
+    gap:24px;
+}
+
+.menu a{
+    text-decoration: none;
+    color: #E0E7FF;
+    font-weight: bold;
+}
+
+main{
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 0 24px;
+
+}
+
+.titulo{
+    margin-bottom: 30px;
+    color: #1E3A8A;
+}
+
+
+
+.formulario {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 10px;
+    border: 1px solid #d1d5db;
+}
+
+.campo {
+    margin-bottom: 20px;
+}
+
+.campo label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #333333;
+}
+
+.campo input{
+    width: 100%;
+    padding: 11px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 15px;
+}
+.campo select{
+    width: 100%;
+    padding: 11px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 15px;
+}
+.campo textarea {
+    width: 100%;
+    padding: 11px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 15px;
+}
+
+
+button {
+    background-color: #1E3A8A;
+    color: #ffffff;
+    border: none;
+    padding: 12px 22px;
+    border-radius: 6px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #3749A3;
+}
+
+.login {
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 10px;
+    border: 1px solid #d1d5db;
+    max-width: 400px;
+    width: 100%;
+    margin: 80px auto; 
+}
+
+.login h2 {
+    margin-bottom: 24px;
+    color: #1E3A8A;
+    text-align: center;
+}
+
+.login form {
+    display: flex;
+    flex-direction: column;
+}
+
+.login label {
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #333333;
+}
+
+.login input {
+    width: 100%;
+    padding: 11px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 15px;
+    margin-bottom: 20px;
+    outline: none; 
+}
+
+.dashboard {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 24px;
+}
+
+.dashboard h2 {
+    color: #1E3A8A;
+    margin-bottom: 10px;
+}
+
+.dashboard p {
+    color: #555;
+}
+
+
+.resumo-geral {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 20px;
+    margin: 30px 0;
+}
+
+.card-resumo {
+    background-color: #ffffff;
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+}
+
+.card-resumo h3 {
+    margin-bottom: 10px;
+    color: #1E3A8A;
+    font-size: 16px;
+}
+
+.card-resumo p {
+    font-size: 28px;
+    font-weight: bold;
+    color: #222222;
+}
+
+/* Listas */
+
+.painel {
+    background-color: #ffffff;
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+    padding: 25px;
+    margin-bottom: 25px;
+}
+
+.painel h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+
+.painel ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.painel ul li {
+    padding: 10px 0;
+    border-bottom: 1px solid #e5e7eb;
+    font-size: 15px;
+}
+
+.painel ul li:last-child {
+    border-bottom: none;
+}
+
+/* Tabelas */
+
+.tabela-dashboard {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    background-color: #ffffff;
+}
+
+.tabela-dashboard th {
+    background-color: #1E3A8A;
+    color: #ffffff;
+    padding: 12px;
+    text-align: left;
+}
+
+.tabela-dashboard td {
+    padding: 12px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.tabela-dashboard tr:hover {
+    background-color: #f8fafc;
+}
+
+/* Separação entre seções */
+
+.secao-dashboard {
+    margin-bottom: 35px;
+}
+
+
