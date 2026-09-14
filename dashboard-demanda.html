@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -11,153 +9,36 @@
 </head>
 
 <body>
-    
 
-    
-    <header>
-        <h1>Sistema de Acompanhamento de Demandas</h1>
+    <header class="cabecalho">
+        <h2>Sistema de Acompanhamento de Demandas</h2>
 
-        
-        <nav>
-            #Dashboard</a> |
-            #Demandas</a> |
-            <a va Demanda</a> |
-            #Perfil</a> |
-            #Sair</a>
+        <nav class="menu">
+            <a href="dashboard-demanda.html">Dashboard</a>
+            <a href="Listagem-demandas.html">Demandas</a>
+            <a href="cadastro-demanda.html">Nova Demanda</a>
+            <a href="perfil.html">Perfil</a>
+            <a href="login.html">Sair</a>
         </nav>
     </header>
 
-    <hr>
+    <main class="dashboard">
 
-    
-    <section>
-        <h2>Dashboard</h2>
-        <p>Visão geral das demandas cadastradas no sistema.</p>
-    </section>
+        <section class="titulo">
+            <h1>Dashboard</h1>
+            <p>Visão geral das demandas cadastradas no sistema.</p>
+        </section>
 
-    
-    <section>
-        <h2>Resumo Geral</h2>
+        <section class="secao-dashboard">
+            <h2>Resumo Geral</h2>
 
-        <div>
-            <h3>Total de Demandas</h3>
-            <p>[quantidade]</p>
-        </div>
+            <div class="resumo-geral">
 
-        <div>
-            <h3>Demandas Abertas</h3>
-            <p>[quantidade]</p>
-        </div>
+                <div class="card-resumo">
+                    <h3>Total de Demandas</h3>
+                    <p>120</p>
+                </div>
 
-        <div>
-            <h3>Em Andamento</h3>
-            <p>[quantidade]</p>
-        </div>
-
-        <div>
-            <h3>Em Revisão</h3>
-            <p>[quantidade]</p>
-        </div>
-
-        <div>
-            <h3>Concluídas</h3>
-            <p>[quantidade]</p>
-        </div>
-
-        <div>
-            <h3>Canceladas</h3>
-            <p>[quantidade]</p>
-        </div>
-    </section>
-
-    <hr>
-
-    
-    <section>
-        <h2>Demandas por Prioridade</h2>
-
-        <ul>
-            <li>Crítica: [quantidade]</li>
-            <li>Alta: [quantidade]</li>
-            <li>Média: [quantidade]</li>
-            <li>Baixa: [quantidade]</li>
-        </ul>
-    </section>
-
-    <hr>
-
-    
-    <section>
-        <h2>Demandas por Tipo</h2>
-
-        <ul>
-            <li>Tarefa: [quantidade]</li>
-            <li>Defeito: [quantidade]</li>
-            <li>Melhoria: [quantidade]</li>
-            <li>Documentação: [quantidade]</li>
-        </ul>
-    </section>
-
-    <hr>
-
-    
-    <section>
-        <h2>Demandas Críticas em Aberto</h2>
-
-        <table border="1">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Título</th>
-                    <th>Projeto</th>
-                    <th>Responsável</th>
-                    <th>Status</th>
-                    <th>Prazo</th>
-                </tr>
-            </thead>
-
-            <tbody>
-                <tr>
-                    <td>001</td>
-                    <td>Exemplo</td>
-                    <td>Exemplo2</td>
-                    <td>Exemplo3</td>
-                    <td>Exemplo4</td>
-                    <td>Exemplo5</td>
-                </tr>
-
-                <tr>
-                    <td>002</td>
-                    <td>Exemplo</td>
-                    <td>Exemplo2</td>
-                    <td>Exemplo3</td>
-                    <td>Exemplo4</td>
-                    <td>Exemplo5</td>
-                </tr>
-            </tbody>
-        </table>
-    </section>
-
-    <hr>
-
-    
-    <section>
-        <h2>Demandas Próximas do Prazo de Finalização</h2>
-
-        <table border="1">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Título</th>
-                    <th>Prioridade</th>
-                    <th>Status</th>
-                    <th>Prazo</th>
-                </tr>
-                <td>Exemplo</td>
-                <td>Exemplo2</td>
-                <td>Exemplo3</td>
-                <td>Exemplo4</td>
-                <td>Exemplo5</td>
-            </thead>
-
-            <tbody>
+                <div class="card-resumo">
+                    <h3>Demandas Abertas</h3>
+         
