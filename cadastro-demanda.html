@@ -1,10 +1,14 @@
 <!DOCTYPE html>
-<html lang="pt_BR">
+<!-- Autor: Leonardo Furlan Curtulo
+Descrição: tela de cadastro de demandas. -->
+
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nova demanda - Sistema de acompanhamento de Demandas</title>
     <link rel="stylesheet" href="style.css">
+    <script src="js/cadastro-demanda.js" defer></script>
 </head>
 <body>
 
@@ -21,46 +25,54 @@
         <h1 class="titulo">Cadastrar nova demanda</h1>
         <p>Preencha os dados abaixo para registrar uma nova demanda.</p>
 
-    
+        <p id="mensagemSucesso"></p>
 
-        <form class="formulario">
+        <form id="formDemanda" class="formulario" novalidate>
             <div class="campo">
                 <label for="titulo">Título</label>
                 <input type="text" id="titulo" name="titulo" required>
+                <span id="erroTitulo" class="mensagem-erro"></span>
             </div>
         
 
             <div class="campo">
                 <label for="descricao">Descrição</label>
                 <textarea id="descricao" name="descricao" required></textarea>
+                <span id="erroDesc" class="mensagem-erro"></span>
             </div>
 
             <div class="campo">
                 <label for="tipo">Tipo da demanda</label>
                 <select id="tipo" name="tipo" required>
+                    <option value="">Selecione o tipo...</option>
                     <option value="tarefa">Tarefa</option>
                     <option value="defeito">Defeito</option>
                     <option value="melhoria">Melhoria</option>
                     <option value="documentacao">Documentação</option>
                 </select>
+                <span id="erroTipo" class="mensagem-erro"></span>
             </div>
 
             <div class="campo">
                 <label for="prioridade">Prioridade</label>
                 <select id="prioridade" name="prioridade" required>
+                    <option value="">Selecione a prioridade...</option>
                     <option value="critica">Crítica</option>
                     <option value="alta">Alta</option>
                     <option value="media">Média</option>
                     <option value="baixa">Baixa</option>
 
                 </select>
+                <span id="erroPrioridade" class="mensagem-erro"></span>
             </div>
             
             <div class="campo">
                 <label for="projeto">Projeto associado</label>
                 <select id="projeto" name="projeto" required>
+                    <option value="">Selecione o projeto...</option>
                     <option value="projeto-a">Sistema de Acompanhamento de Demandas</option>
                 </select>
+                <span id="erroProjeto" class="mensagem-erro"></span>
             </div>
 
             <div class="campo">
@@ -73,6 +85,7 @@
             <div class="campo">
                 <label for="prazo">Prazo de finalização</label>
                 <input type="date" id="prazo" name="prazo">
+                <span id="erroPrazo" class="mensagem-erro"></span>
             </div>
 
             <div class="campo">
