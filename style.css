@@ -1,3 +1,7 @@
+/* 
+AUTOR: Leonardo Furlan Curtulo
+Descrição: CSS padrão do projeto, seguido por todas as telas do sistema. */
+
 * {
     box-sizing: border-box;
 }
@@ -277,3 +281,20 @@ button:hover {
 }
 
 
+
+.campo .campo-invalido{
+    border-color: #DC2626;
+    background-color: #FEF2F2;
+}
+
+.mensagem-erro{
+    display: block;
+    margin-top: 6px;
+    color: #DC2626;
+    font-size: 13px;
+}
+
+#mensagemSucesso{
+    color: #16A34A;
+    font-weight: bold;
+}
