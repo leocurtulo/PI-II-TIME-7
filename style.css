@@ -1,54 +1,101 @@
+/* 
+AUTOR: Leonardo Furlan Curtulo
+Descrição: CSS padrão do projeto, seguido por todas as telas do sistema. */
+
 * {
     box-sizing: border-box;
 }
 
-body {
+
+body{
     margin: 0;
     padding: 0;
     font-family: Arial, Helvetica, sans-serif;
     background-color: #F1F5F9;
     color: #222222;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+    
 }
 
-.login {
+.cabecalho{
+    background-color: #1E3A8A;
+    padding: 16px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #d1d5db;
+}
+.cabecalho h2{
+    color: #E0E7FF;
+}
+
+.menu{
+    display:flex;
+    gap:24px;
+}
+
+.menu a{
+    text-decoration: none;
+    color: #E0E7FF;
+    font-weight: bold;
+}
+
+main{
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 0 24px;
+
+}
+
+.titulo{
+    margin-bottom: 30px;
+    color: #1E3A8A;
+}
+
+
+
+.formulario {
     background-color: #ffffff;
-    padding: 40px;
+    padding: 30px;
     border-radius: 10px;
     border: 1px solid #d1d5db;
-    max-width: 400px;
-    width: 100%;
 }
 
-.login h2 {
-    margin-bottom: 24px;
-    color: #1E3A8A;
-    text-align: center;
+.campo {
+    margin-bottom: 20px;
 }
 
-form {
-    display: flex;
-    flex-direction: column;
-}
-
-label {
+.campo label {
+    display: block;
     margin-bottom: 8px;
     font-weight: bold;
     color: #333333;
 }
 
-input {
+.campo input{
     width: 100%;
     padding: 11px;
     border: 1px solid #cbd5e1;
     border-radius: 6px;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 15px;
-    margin-bottom: 20px;
 }
+.campo select{
+    width: 100%;
+    padding: 11px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 15px;
+}
+.campo textarea {
+    width: 100%;
+    padding: 11px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 15px;
+}
+
 
 button {
     background-color: #1E3A8A;
@@ -63,4 +110,206 @@ button {
 
 button:hover {
     background-color: #3749A3;
+}
+
+.login {
+    background-color: #c9c9c9;
+    padding: 40px;
+    border-radius: 10px;
+    border: 1px solid #d1d5db;
+    max-width: 400px;
+    width: 100%;
+    margin: 80px auto; 
+}
+
+.login h2 {
+    margin-bottom: 24px;
+    color: #1E3A8A;
+    text-align: center;
+}
+
+.login form {
+    display: flex;
+    flex-direction: column;
+}
+
+.login label {
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #333333;
+}
+
+.login input {
+    width: 100%;
+    padding: 11px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 15px;
+    margin-bottom: 5px;
+    outline: none; 
+}
+
+.login .mensagem-erro {
+    display: block;
+    min-height: 16px;
+    margin-top: 2px;
+    margin-bottom: 16px;
+    color: #DC2626;
+    font-size: 13px;
+    line-height: 1.3;
+}
+
+.login input.campo-invalido {
+    border-color: #DC2626;
+    background-color: #FEF2F2;
+}
+
+.dashboard {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 24px;
+}
+
+.dashboard h2 {
+    color: #1E3A8A;
+    margin-bottom: 10px;
+}
+
+.dashboard p {
+    color: #555;
+}
+
+
+.resumo-geral {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 20px;
+    margin: 30px 0;
+}
+
+.card-resumo {
+    background-color: #ffffff;
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+}
+
+.card-resumo h3 {
+    margin-bottom: 10px;
+    color: #1E3A8A;
+    font-size: 16px;
+}
+
+.card-resumo p {
+    font-size: 28px;
+    font-weight: bold;
+    color: #222222;
+}
+
+
+
+.painel {
+    background-color: #ffffff;
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+    padding: 25px;
+    margin-bottom: 25px;
+}
+
+.painel h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+
+.painel ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.painel ul li {
+    padding: 10px 0;
+    border-bottom: 1px solid #e5e7eb;
+    font-size: 15px;
+}
+
+.painel ul li:last-child {
+    border-bottom: none;
+}
+
+
+
+.tabela-dashboard {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    background-color: #ffffff;
+}
+
+.tabela-dashboard th {
+    background-color: #1E3A8A;
+    color: #ffffff;
+    padding: 12px;
+    text-align: left;
+}
+
+.tabela-dashboard td {
+    padding: 12px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.tabela-dashboard tr:hover {
+    background-color: #f8fafc;
+}
+
+
+
+.secao-dashboard {
+    margin-bottom: 35px;
+}
+
+
+
+#lista {
+    display: block !important;
+}
+
+.exemplo {
+    background-color: #ffffff;
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.exemplo h3 {
+    color: #1E3A8A;
+    margin-top: 0;
+    margin-bottom: 15px;
+}
+
+.exemplo p {
+    margin: 8px 0;
+    color: #555555;
+}
+
+
+
+.campo .campo-invalido{
+    border-color: #DC2626;
+    background-color: #FEF2F2;
+}
+
+.mensagem-erro{
+    display: block;
+    margin-top: 6px;
+    color: #DC2626;
+    font-size: 13px;
+}
+
+#mensagemSucesso{
+    color: #16A34A;
+    font-weight: bold;
 }
