@@ -8,15 +8,19 @@
 <body>
   <div class="login">
     <h2>Faça seu login</h2>
-    <form>
+    <form id="formLogin">
       <label for="usuario">Usuário</label>
       <input type="text" id="usuario" name="usuario" required>
+      <span id="erroUsuario" class="mensagem-erro"></span>
 
       <label for="senha">Senha</label>
       <input type="password" id="senha" name="senha" required>
+      <span id="erroSenha" class="mensagem-erro"></span>
 
       <button type="submit">Entrar</button>
     </form>
   </div>
+
+  <script src="script.js"></script>
 </body>
 </html>
