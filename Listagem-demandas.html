@@ -13,31 +13,118 @@
     </header>
 
     <main class="container">
-
         <div id="inicio">
-            <h1>Demandas</h1>
+            <h1 class="titulo">Demandas</h1>
         </div>
 
-        <div id="lista" style="display: none;">
-            <h1>Lista de Demandas</h1>
+        <!-- Painel de Buscas e Filtros -->
+        <div class="painel">
+            <h2>Buscar e Filtrar</h2>
 
-            <div class="exemplo">
+            <div class="campo">
+                <label for="buscaTexto">Buscar (Título ou Descrição):</label>
+                <input type="text" id="buscaTexto" placeholder="Digite o que procura...">
+            </div>
+
+            <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+
+                <div class="campo" style="flex: 1; min-width: 140px;">
+                    <label for="filtroStatus">Status:</label>
+                    <select id="filtroStatus">
+                        <option value="todos">Todos</option>
+                        <option value="Pendente">Pendente</option>
+                        <option value="Em andamento">Em andamento</option>
+                        <option value="Concluído">Concluído</option>
+                    </select>
+                </div>
+
+                <div class="campo" style="flex: 1; min-width: 140px;">
+                    <label for="filtroPrioridade">Prioridade:</label>
+                    <select id="filtroPrioridade">
+                        <option value="todos">Todas</option>
+                        <option value="Alta">Alta</option>
+                        <option value="Média">Média</option>
+                        <option value="Baixa">Baixa</option>
+                    </select>
+                </div>
+
+                <div class="campo" style="flex: 1; min-width: 140px;">
+                    <label for="filtroTipo">Tipo:</label>
+                    <select id="filtroTipo">
+                        <option value="todos">Todos</option>
+                        <option value="Bug">Bug (Erro)</option>
+                        <option value="Melhoria">Melhoria</option>
+                        <option value="Nova Funcionalidade">Nova Funcionalidade</option>
+                    </select>
+                </div>
+
+                <div class="campo" style="flex: 1; min-width: 140px;">
+                    <label for="filtroResponsavel">Responsável:</label>
+                    <select id="filtroResponsavel">
+                        <option value="todos">Todos</option>
+                        <option value="João Silva">João Silva</option>
+                        <option value="Maria Santos">Maria Santos</option>
+                    </select>
+                </div>
+
+                <div class="campo" style="flex: 1; min-width: 140px;">
+                    <label for="filtroProjeto">Projeto:</label>
+                    <select id="filtroProjeto">
+                        <option value="todos">Todos</option>
+                        <option value="Sistema RH">Sistema RH</option>
+                        <option value="App Mobile">App Mobile</option>
+                    </select>
+                </div>
+
+                <div class="campo" style="flex: 1; min-width: 140px;">
+                    <label for="ordenacao">Ordenar por:</label>
+                    <select id="ordenacao">
+                        <option value="prazo">Prazo (Mais próximo)</option>
+                        <option value="criacao">Data de Criação</option>
+                        <option value="prioridade">Prioridade</option>
+                        <option value="status">Status (A-Z)</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div id="lista" style="display: block;">
+
+            <!-- DEMANDA 1 -->
+            <div class="exemplo" data-status="Em andamento" data-prioridade="Média" data-tipo="Melhoria" data-responsavel="João Silva" data-projeto="Sistema RH" data-prazo="2026-09-20" data-criacao="2026-09-01" data-nivel-prioridade="2">
                 <h3>Atualização do sistema</h3>
+                <p class="descricao">Migrar o banco de dados e atualizar o framework principal.</p>
+                <hr style="border: 0; border-top: 1px solid #e5e7eb; margin: 15px 0;">
+                <p><strong>Projeto:</strong> Sistema RH | <strong>Tipo:</strong> Melhoria</p>
                 <p><strong>Responsável:</strong> João Silva</p>
                 <p><strong>Prazo:</strong> 20/09/2026</p>
+                <p><strong>Prioridade:</strong> Média</p>
                 <p><strong>Status:</strong> Em andamento</p>
+<<<<<<< Updated upstream
+=======
+                <button onclick="window.location.href='detalhes-demanda.html'" style="margin-top: 15px;">Ver detalhes</button>
+>>>>>>> Stashed changes
             </div>
 
-            <div class="exemplo">
+            <!-- DEMANDA 2 -->
+            <div class="exemplo" data-status="Pendente" data-prioridade="Alta" data-tipo="Bug" data-responsavel="Maria Santos" data-projeto="App Mobile" data-prazo="2026-09-25" data-criacao="2026-09-10" data-nivel-prioridade="1">
                 <h3>Correção de cadastro de usuários</h3>
+                <p class="descricao">Resolver bug na tela de login onde usuários não conseguem recuperar a senha.</p>
+                <hr style="border: 0; border-top: 1px solid #e5e7eb; margin: 15px 0;">
+                <p><strong>Projeto:</strong> App Mobile | <strong>Tipo:</strong> Bug (Erro)</p>
                 <p><strong>Responsável:</strong> Maria Santos</p>
                 <p><strong>Prazo:</strong> 25/09/2026</p>
+                <p><strong>Prioridade:</strong> Alta</p>
                 <p><strong>Status:</strong> Pendente</p>
+<<<<<<< Updated upstream
+=======
+                <button onclick="window.location.href='detalhes-demanda.html'" style="margin-top: 15px;">Ver detalhes</button>
+>>>>>>> Stashed changes
             </div>
 
         </div>
-
     </main>
 
+    <script src="js/filtros-busca-listagem-demanda.js"></script>
 </body>
 </html>
