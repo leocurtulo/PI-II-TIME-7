@@ -89,24 +89,63 @@
             </div>
 
         </section>
+        <section class="formulario">
+
+    <h2>Pesquisar na Demanda</h2>
+
+    <div class="campo">
+        <input
+            type="text"
+            id="campoBusca"
+            placeholder="Pesquisar palavras-chave">
+    </div>
+
+    <p id="erroBusca"></p>
+
+    <button id="btnBusca" type="button">
+        Buscar
+    </button>
+
+</section>
+
 
         <section class="formulario">
 
-            <h2>Comentários</h2>
+    <h2>Comentários</h2>
 
-            <article class="campo">
-                <label></label>
-                <p><strong></strong></p>
-                <p></p>
-            </article>
+    <article class="campo item-pesquisavel">
+        <p><strong></strong></p>
+        <p></p>
+    </article>
 
-            <article class="campo">
-                <label></label>
-                <p><strong></strong></p>
-                <p></p>
-            </article>
+    <article class="campo item-pesquisavel">
+        <p><strong></strong></p>
+        <p></p>
+    </article>
 
-        </section>
+    <div class="campo">
+
+        <label for="comentario">
+            Novo Comentário:
+        </label>
+
+        <textarea
+            id="comentario"
+            rows="5"
+            placeholder="Digite seu comentário">
+        </textarea>
+
+        <p id="erro-comentario"></p>
+
+        <button
+            id="btnComentario"
+            type="button">
+            Enviar Comentário
+        </button>
+
+    </div>
+
+</section>
 
         <section class="formulario">
 
@@ -128,6 +167,10 @@
         </section>
 
     </main>
-
+  
+<script src="detalhes-demanda.js"></script>   
+    
+    
 </body>
-</html>
+    
+    </html>
