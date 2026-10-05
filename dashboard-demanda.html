@@ -1,4 +1,7 @@
 <!DOCTYPE html>
+<!--
+    AUTOR: vinicius pansieri chiarelli  
+-->
 <html lang="pt-BR">
 
 <head>
@@ -17,8 +20,7 @@
             <a href="dashboard-demanda.html">Dashboard</a>
             <a href="Listagem-demandas.html">Demandas</a>
             <a href="cadastro-demanda.html">Nova Demanda</a>
-            <a href="perfil.html">Perfil</a>
-            <a href="login.html">Sair</a>
+            <a href="login.html">Login</a>
         </nav>
     </header>
 
@@ -29,16 +31,134 @@
             <p>Visão geral das demandas cadastradas no sistema.</p>
         </section>
 
+        <!-- Resumo geral: total e quantidade por status -->
         <section class="secao-dashboard">
             <h2>Resumo Geral</h2>
 
             <div class="resumo-geral">
-
                 <div class="card-resumo">
                     <h3>Total de Demandas</h3>
-                    <p>120</p>
+                    <p id="total-demandas">0</p>
                 </div>
 
                 <div class="card-resumo">
                     <h3>Demandas Abertas</h3>
-         
+                    <p id="qtd-abertas">0</p>
+                </div>
+
+                <div class="card-resumo">
+                    <h3>Em Andamento</h3>
+                    <p id="qtd-andamento">0</p>
+                </div>
+
+                <div class="card-resumo">
+                    <h3>Em Revisão</h3>
+                    <p id="qtd-revisao">0</p>
+                </div>
+
+                <div class="card-resumo">
+                    <h3>Concluídas</h3>
+                    <p id="qtd-concluidas">0</p>
+                </div>
+
+                <div class="card-resumo">
+                    <h3>Canceladas</h3>
+                    <p id="qtd-canceladas">0</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quantidade de demandas por prioridade -->
+        <section class="secao-dashboard">
+            <h2>Demandas por Prioridade</h2>
+
+            <div class="resumo-geral">
+                <div class="card-resumo">
+                    <h3>Crítica</h3>
+                    <p id="prio-critica">0</p>
+                </div>
+
+                <div class="card-resumo">
+                    <h3>Alta</h3>
+                    <p id="prio-alta">0</p>
+                </div>
+
+                <div class="card-resumo">
+                    <h3>Média</h3>
+                    <p id="prio-media">0</p>
+                </div>
+
+                <div class="card-resumo">
+                    <h3>Baixa</h3>
+                    <p id="prio-baixa">0</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quantidade de demandas por tipo -->
+        <section class="secao-dashboard">
+            <h2>Demandas por Tipo</h2>
+
+            <div class="resumo-geral">
+                <div class="card-resumo">
+                    <h3>Tarefa</h3>
+                    <p id="tipo-tarefa">0</p>
+                </div>
+
+                <div class="card-resumo">
+                    <h3>Defeito</h3>
+                    <p id="tipo-defeito">0</p>
+                </div>
+
+                <div class="card-resumo">
+                    <h3>Melhoria</h3>
+                    <p id="tipo-melhoria">0</p>
+                </div>
+
+                <div class="card-resumo">
+                    <h3>Documentação</h3>
+                    <p id="tipo-documentacao">0</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Demandas críticas que ainda não foram finalizadas -->
+        <section class="painel">
+            <h2>Demandas Críticas em Aberto</h2>
+            <ul id="lista-criticas"></ul>
+        </section>
+
+        <!-- Demandas próximas do prazo, com campo de dias validado -->
+        <section class="painel">
+            <h2>Demandas Próximas do Prazo</h2>
+
+            <!-- novalidate: a validação é feita pelo nosso JavaScript -->
+            <form id="form-prazo" novalidate>
+                <div class="campo">
+                    <label for="dias-prazo">Mostrar demandas que vencem em até (dias)</label>
+                    <input type="text" id="dias-prazo" name="dias" inputmode="numeric" autocomplete="off">
+                    <span class="mensagem-erro" id="erro-dias"></span>
+                </div>
+                <button type="submit">Filtrar</button>
+            </form>
+
+            <table class="tabela-dashboard">
+                <thead>
+                    <tr>
+                        <th>Título</th>
+                        <th>Prioridade</th>
+                        <th>Status</th>
+                        <th>Prazo</th>
+                        <th>Situação</th>
+                    </tr>
+                </thead>
+                <tbody id="tabela-prazo"></tbody>
+            </table>
+        </section>
+
+    </main>
+
+    <script src="js/dashboard.js"></script>
+</body>
+
+</html>
