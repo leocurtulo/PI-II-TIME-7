@@ -179,3 +179,7 @@ export const comentarios : Comentario[] = [
     { id: 2, demandaId: 1, usuarioId: 3, texto: "O erro acontece quando o campo descrição fica vazio.", dataHora: "2026-10-22T14:40:00" },
     { id: 3, demandaId: 5, usuarioId: 1, texto: "Correção enviada para revisão. Favor testar no celular.", dataHora: "2026-10-27T10:05:00" },
 ];
+
+// Listas oficiais usadas nas validações (iguais às da interface Demanda)
+export const TIPOS = ["Tarefa", "Defeito", "Melhoria", "Documentação"];
+export const PRIORIDADES = ["Crítica", "Alta", "Média", "Baixa"];

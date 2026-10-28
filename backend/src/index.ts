@@ -5,6 +5,9 @@
 // Importa a biblioteca
 import express from "express";
 
+// Importa as rotas de cada tela
+import rotasCadastro from "./rotas/cadastro";
+
 // Cria a aplicação (o servidor) Express
 const app = express();
 
@@ -13,6 +16,12 @@ app.use(express.json());
 
 // Porta em que o servidor vai rodar (http://localhost:3000)
 const PORTA = 3000;
+
+
+
+app.use(rotasCadastro);
+
+
 
 
 
