@@ -6,7 +6,7 @@
 import express from "express";
 
 // Importa as rotas de cada tela
-import rotasCadastro from "./rotas/cadastro";
+import { rotasCadastro } from "./rotas/cadastro";
 
 // Cria a aplicação (o servidor) Express
 const app = express();
@@ -19,7 +19,8 @@ const PORTA = 3000;
 
 
 
-app.use(rotasCadastro);
+// Registra as rotas da tela de cadastro (GET /projetos e POST /demandas)
+rotasCadastro(app);
 
 
 
