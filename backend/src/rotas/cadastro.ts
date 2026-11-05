@@ -25,6 +25,18 @@ export function rotasCadastro(app: Express) {
         res.status(200).json(projetos);
     });
 
+    // GET /usuarios: lista os usuários para o select de responsável.
+    // Devolve só id e nome: a senha NUNCA pode ser enviada para a tela.
+    app.get("/usuarios", (req, res) => {
+        const lista: { id: number; nome: string }[] = [];
+
+        usuarios.forEach((usuario) => {
+            lista.push({ id: usuario.id, nome: usuario.nome });
+        });
+
+        res.status(200).json(lista);
+    });
+
 
 
     // POST /demandas: cadastra uma nova demanda

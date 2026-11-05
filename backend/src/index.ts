@@ -5,11 +5,17 @@
 // Importa a biblioteca
 import express from "express";
 
+// Importa o CORS (libera a tela, que roda em outra porta, a chamar a API)
+import cors from "cors";
+
 // Importa as rotas de cada tela
 import { rotasCadastro } from "./rotas/cadastro";
 
 // Cria a aplicação (o servidor) Express
 const app = express();
+
+// Permite que as telas do front (ex.: Live Server na porta 5500) chamem a API
+app.use(cors());
 
 // Permite que o servidor leia JSON
 app.use(express.json());
