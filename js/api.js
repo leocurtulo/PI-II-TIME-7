@@ -57,3 +57,17 @@ async function listarUsuariosApi() {
 
     return dados;
 }
+
+
+// API externa (BrasilAPI): busca os feriados nacionais de um ano
+// Exemplo de resposta: [ { date: "2026-12-25", name: "Natal", type: "national" }, ... ]
+async function buscarFeriadosApi(ano) {
+    const resposta = await fetch("https://brasilapi.com.br/api/feriados/v1/" + ano);
+    const dados = await resposta.json();
+
+    if (!resposta.ok) {
+        throw new Error("Não foi possível consultar os feriados.");
+    }
+
+    return dados;
+}

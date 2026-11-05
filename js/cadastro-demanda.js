@@ -1,5 +1,6 @@
 // Autor: Leonardo Furlan Curtulo
 // Descrição: validações do formulário de cadastro de demanda, carregamento dos projetos pela API e envio da demanda (POST /demandas).
+// Verificação de feriado nacional. (BrasilAPI)
 
 const formulario = document.querySelector("#formDemanda");
 
@@ -88,6 +89,26 @@ formulario.addEventListener("submit", async function (event) {
     if (projeto === "") {
         mostrarErro(campoProjeto, erroProjeto, "Selecione o projeto associado!");
         formularioValido = false;
+    }
+
+    limparErro(campoPrazo, erroPrazo);
+
+    if(prazo !== ""){
+        try{
+            const ano = prazo.slice(0, 4);
+            const feriados = await buscarFeriadosApi(ano);
+
+            const feriado = feriados.find(f => f.date === prazo);
+
+            if(feriado !== undefined){
+                mostrarErro(campoPrazo, erroPrazo, "O prazo não pode ser em feriado nacional (" + feriado.name + ").");
+                formularioValido = false;
+            }
+        }catch(erro){
+            mostrarErro(campoPrazo, erroPrazo, "Não foi possível verificar os feriados. Tente novamente.");
+            formularioValido = false;
+            
+        }
     }
 
     if (!formularioValido) {
