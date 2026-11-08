@@ -4,6 +4,28 @@ const senha = document.getElementById("senha");
 const erroUsuario = document.getElementById("erroUsuario");
 const erroSenha = document.getElementById("erroSenha");
 
+// Atualiza os requisitos da senha enquanto digita
+senha.addEventListener("input", function () {
+    const valorSenha = senha.value;
+
+    document.getElementById("req8").className =
+        valorSenha.length >= 8 ? "valido" : "invalido";
+
+    document.getElementById("reqMaiuscula").className =
+        /[A-Z]/.test(valorSenha) ? "valido" : "invalido";
+
+    document.getElementById("reqMinuscula").className =
+        /[a-z]/.test(valorSenha) ? "valido" : "invalido";
+
+    document.getElementById("reqNumero").className =
+        /[0-9]/.test(valorSenha) ? "valido" : "invalido";
+
+    document.getElementById("reqEspecial").className =
+        /[!@#$%^&*(),.?":{}|<>]/.test(valorSenha)
+            ? "valido"
+            : "invalido";
+});
+
 formulario.addEventListener("submit", function(event) {
     event.preventDefault();
 
@@ -15,40 +37,28 @@ formulario.addEventListener("submit", function(event) {
 
     let formularioValido = true;
 
-    if (usuario.value.trim() === "") {
-        erroUsuario.textContent = "O campo usuário é obrigatório.";
+    const email = usuario.value.trim();
+
+    if (email === "") {
+        erroUsuario.textContent = "O e-mail é obrigatório.";
         usuario.classList.add("campo-invalido");
         formularioValido = false;
-    } else if (usuario.value.trim().length < 3) {
-        erroUsuario.textContent = "O usuário deve possuir pelo menos 3 caracteres.";
+    } else if (!email.includes("@") || !email.includes(".")) {
+        erroUsuario.textContent = "Digite um e-mail válido.";
         usuario.classList.add("campo-invalido");
         formularioValido = false;
     }
 
     const valorSenha = senha.value;
 
-    if (valorSenha === "") {
-        erroSenha.textContent = "O campo senha é obrigatório.";
-        senha.classList.add("campo-invalido");
-        formularioValido = false;
-    } else if (valorSenha.length < 8) {
-        erroSenha.textContent = "A senha deve possuir pelo menos 8 caracteres.";
-        senha.classList.add("campo-invalido");
-        formularioValido = false;
-    } else if (!/[A-Z]/.test(valorSenha)) {
-        erroSenha.textContent = "A senha deve possuir pelo menos uma letra maiúscula.";
-        senha.classList.add("campo-invalido");
-        formularioValido = false;
-    } else if (!/[a-z]/.test(valorSenha)) {
-        erroSenha.textContent = "A senha deve possuir pelo menos uma letra minúscula.";
-        senha.classList.add("campo-invalido");
-        formularioValido = false;
-    } else if (!/[0-9]/.test(valorSenha)) {
-        erroSenha.textContent = "A senha deve possuir pelo menos um número.";
-        senha.classList.add("campo-invalido");
-        formularioValido = false;
-    } else if (!/[!@#$%^&*(),.?":{}|<>]/.test(valorSenha)) {
-        erroSenha.textContent = "A senha deve possuir pelo menos um caractere especial.";
+    if (
+        valorSenha.length < 8 ||
+        !/[A-Z]/.test(valorSenha) ||
+        !/[a-z]/.test(valorSenha) ||
+        !/[0-9]/.test(valorSenha) ||
+        !/[!@#$%^&*(),.?":{}|<>]/.test(valorSenha)
+    ) {
+        erroSenha.textContent = "A senha não atende todos os requisitos.";
         senha.classList.add("campo-invalido");
         formularioValido = false;
     }
