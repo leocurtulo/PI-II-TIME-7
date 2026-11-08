@@ -26,7 +26,7 @@ senha.addEventListener("input", function () {
             : "invalido";
 });
 
-formulario.addEventListener("submit", function(event) {
+formulario.addEventListener("submit", async function (event) {
     event.preventDefault();
 
     erroUsuario.textContent = "";
@@ -38,6 +38,7 @@ formulario.addEventListener("submit", function(event) {
     let formularioValido = true;
 
     const email = usuario.value.trim();
+    const valorSenha = senha.value;
 
     if (email === "") {
         erroUsuario.textContent = "O e-mail é obrigatório.";
@@ -48,8 +49,6 @@ formulario.addEventListener("submit", function(event) {
         usuario.classList.add("campo-invalido");
         formularioValido = false;
     }
-
-    const valorSenha = senha.value;
 
     if (
         valorSenha.length < 8 ||
@@ -63,7 +62,45 @@ formulario.addEventListener("submit", function(event) {
         formularioValido = false;
     }
 
-    if (formularioValido) {
-        alert("Login validado com sucesso!");
+    if (!formularioValido) {
+        return;
+    }
+
+    try {
+        const resposta = await fetch("http://localhost:3000/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                email: email,
+                senha: valorSenha
+            })
+        });
+
+        const dados = await resposta.json();
+
+        if (resposta.ok) {
+
+            localStorage.setItem(
+                "usuarioLogado",
+                JSON.stringify(dados)
+            );
+
+            alert("Login realizado com sucesso!");
+
+            window.location.href = "dashboard-demanda.html";
+
+        } else {
+
+            erroUsuario.textContent = dados.mensagem;
+
+        }
+
+    } catch (erro) {
+
+        erroUsuario.textContent =
+            "Erro ao conectar com o servidor.";
+
     }
 });
