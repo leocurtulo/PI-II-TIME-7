@@ -12,6 +12,8 @@ import cors from "cors";
 import { rotasCadastro } from "./rotas/cadastro";
 import { rotasLogin } from "./rotas/login";
 
+import { abrirConexao } from "./banco/conexao";
+
 // Cria a aplicação (o servidor) Express
 const app = express();
 
@@ -37,6 +39,18 @@ rotasLogin(app);
 // Rota de teste: confirma que o servidor está funcionando
 app.get("/", (req, res) => {
     res.send("Servidor do Sistema de Acompanhamento de Demandas funcionando!");
+});
+
+// rota para testar a conexão com o banco
+app.get("/teste-banco", async (req, res) => {
+    try {
+        const conexao = await abrirConexao();
+        const resultado = await conexao.execute("SELECT * FROM projeto");
+        await conexao.close();
+        res.status(200).json(resultado.rows);
+    } catch (erro) {
+        res.status(500).json({ mensagem: "Erro ao conectar no banco.", erro: String(erro) });
+    }
 });
 
 
