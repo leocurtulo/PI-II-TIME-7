@@ -313,3 +313,16 @@ button:hover {
     color: #16A34A;
     font-weight: bold;
 }
+
+.valido { 
+    color: green; 
+} 
+.invalido { 
+    color: red; 
+} 
+.valido::before { 
+    content: "✓ "; 
+} 
+.invalido::before { 
+    content: "✗ "; 
+}

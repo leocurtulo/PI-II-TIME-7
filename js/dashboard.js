@@ -3,6 +3,11 @@
  * Descrição: Comportamento da tela dashboard-demanda.html.
 
  */
+const usuarioLogado = localStorage.getItem("usuarioLogado");
+
+if (!usuarioLogado) {
+    window.location.href = "login.html";
+}
 
 // 1. Constantes do escopo (valores aceitos pelo sistema)
 const TIPOS = ["Tarefa", "Defeito", "Melhoria", "Documentação"];
