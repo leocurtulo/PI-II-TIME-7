@@ -1,122 +1,68 @@
-console.log('[script.js] arquivo carregado');
+document.addEventListener("DOMContentLoaded", () => {
+    carregarDemandas();
 
-(function () {
-    'use strict';
+    // Vincula a atualização da lista aos inputs e selects do HTML
+    document.getElementById('buscaTexto').addEventListener('input', carregarDemandas);
+    document.getElementById('filtroStatus').addEventListener('change', carregarDemandas);
+    document.getElementById('filtroPrioridade').addEventListener('change', carregarDemandas);
+    document.getElementById('filtroTipo').addEventListener('change', carregarDemandas);
+    document.getElementById('filtroResponsavel').addEventListener('change', carregarDemandas);
+    document.getElementById('filtroProjeto').addEventListener('change', carregarDemandas);
+    document.getElementById('ordenacao').addEventListener('change', carregarDemandas);
+});
 
-    function iniciar() {
-        var inputBusca = document.getElementById('buscaTexto');
-        var selectStatus = document.getElementById('filtroStatus');
-        var selectPrioridade = document.getElementById('filtroPrioridade');
-        var selectTipo = document.getElementById('filtroTipo');
-        var selectResponsavel = document.getElementById('filtroResponsavel');
-        var selectProjeto = document.getElementById('filtroProjeto');
-        var selectOrdenacao = document.getElementById('ordenacao');
-        var btnAplicar = document.getElementById('btnAplicarFiltros');
-        var lista = document.getElementById('lista');
+async function carregarDemandas() {
+    const busca = document.getElementById('buscaTexto').value;
+    const status = document.getElementById('filtroStatus').value;
+    const prioridade = document.getElementById('filtroPrioridade').value;
+    const tipo = document.getElementById('filtroTipo').value;
+    const responsavel = document.getElementById('filtroResponsavel').value;
+    const projeto = document.getElementById('filtroProjeto').value;
+    const ordenarPor = document.getElementById('ordenacao').value;
 
-        if (!lista) {
-            console.error('[script.js] Elemento #lista não encontrado. Confira o ID no HTML.');
-            return;
-        }
+    const params = new URLSearchParams();
+    if (busca) params.append('busca', busca);
+    if (status !== 'todos') params.append('status', status);
+    if (prioridade !== 'todos') params.append('prioridade', prioridade);
+    if (tipo !== 'todos') params.append('tipo', tipo);
+    if (responsavel !== 'todos') params.append('responsavel', responsavel);
+    if (projeto !== 'todos') params.append('projeto', projeto);
+    if (ordenarPor) params.append('ordenarPor', ordenarPor);
 
-        var demandas = Array.prototype.slice.call(document.querySelectorAll('.exemplo'));
-        console.log('[script.js] demandas encontradas:', demandas.length);
+    try {
+        const resposta = await fetch(`http://localhost:3000/api/demandas?${params.toString()}`);
+        const demandas = await resposta.json();
+        renderizarLista(demandas);
+    } catch (erro) {
+        console.error("Erro ao buscar as demandas da API:", erro);
+    }
+}
 
-        var msgVazio = document.createElement('p');
-        msgVazio.textContent = 'Nenhuma demanda encontrada com esses filtros.';
-        msgVazio.style.display = 'none';
-        msgVazio.style.color = '#555555';
-        msgVazio.style.textAlign = 'center';
-        lista.appendChild(msgVazio);
+function renderizarLista(demandas) {
+    const listaContainer = document.getElementById('lista');
+    listaContainer.innerHTML = ''; 
 
-        function normalizar(texto) {
-            return String(texto || '')
-                .normalize('NFD')
-                .replace(/[\u0300-\u036f]/g, '')
-                .toLowerCase()
-                .trim();
-        }
-
-        function valor(select) {
-            return select ? normalizar(select.value) : 'todos';
-        }
-
-        function aplicarFiltros() {
-            var termo = normalizar(inputBusca ? inputBusca.value : '');
-            var fStatus = valor(selectStatus);
-            var fPrioridade = valor(selectPrioridade);
-            var fTipo = valor(selectTipo);
-            var fResponsavel = valor(selectResponsavel);
-            var fProjeto = valor(selectProjeto);
-            var ordem = selectOrdenacao ? selectOrdenacao.value : 'prazo';
-
-            var filtradas = demandas.filter(function (d) {
-                var h3 = d.querySelector('h3');
-                var desc = d.querySelector('.descricao');
-                var titulo = normalizar(h3 ? h3.textContent : '');
-                var descricao = normalizar(desc ? desc.textContent : '');
-
-                var okBusca = termo === '' || titulo.indexOf(termo) !== -1 || descricao.indexOf(termo) !== -1;
-                var okStatus = fStatus === 'todos' || normalizar(d.dataset.status) === fStatus;
-                var okPrioridade = fPrioridade === 'todos' || normalizar(d.dataset.prioridade) === fPrioridade;
-                var okTipo = fTipo === 'todos' || normalizar(d.dataset.tipo) === fTipo;
-                var okResp = fResponsavel === 'todos' || normalizar(d.dataset.responsavel) === fResponsavel;
-                var okProjeto = fProjeto === 'todos' || normalizar(d.dataset.projeto) === fProjeto;
-
-                return okBusca && okStatus && okPrioridade && okTipo && okResp && okProjeto;
-            });
-
-
-            filtradas.sort(function (a, b) {
-                if (ordem === 'prazo') {
-                    return new Date(a.dataset.prazo || 0) - new Date(b.dataset.prazo || 0);
-                }
-                if (ordem === 'criacao') {
-                    return new Date(b.dataset.criacao || 0) - new Date(a.dataset.criacao || 0);
-                }
-                if (ordem === 'prioridade') {
-                    return parseInt(a.dataset.nivelPrioridade || 0, 10) - parseInt(b.dataset.nivelPrioridade || 0, 10);
-                }
-                if (ordem === 'status') {
-                    return (a.dataset.status || '').localeCompare(b.dataset.status || '');
-                }
-                return 0;
-            });
-
-            demandas.forEach(function (d) {
-                d.style.setProperty('display', 'none', 'important');
-            });
-
-            filtradas.forEach(function (d) {
-                d.style.setProperty('display', 'block', 'important');
-                lista.insertBefore(d, msgVazio);
-            });
-
-            msgVazio.style.display = filtradas.length === 0 ? 'block' : 'none';
-
-            console.log('[script.js] filtros aplicados. Resultados:', filtradas.length);
-        }
-
-        if (btnAplicar) {
-            btnAplicar.addEventListener('click', function (e) {
-                e.preventDefault();
-                aplicarFiltros();
-            });
-        }
-
-        // Aplica também ao digitar / trocar um filtro
-        if (inputBusca) inputBusca.addEventListener('input', aplicarFiltros);
-        [selectStatus, selectPrioridade, selectTipo, selectResponsavel, selectProjeto, selectOrdenacao]
-            .forEach(function (s) {
-                if (s) s.addEventListener('change', aplicarFiltros);
-            });
-
-        aplicarFiltros();
+    if (demandas.length === 0) {
+        listaContainer.innerHTML = '<p style="padding: 20px;">Nenhuma demanda encontrada com estes filtros.</p>';
+        return;
     }
 
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', iniciar);
-    } else {
-        iniciar();
-    }
-})();
+    demandas.forEach(demanda => {
+        const div = document.createElement('div');
+        div.className = 'exemplo'; 
+
+        div.innerHTML = `
+            <h3>${demanda.titulo}</h3>
+            <p class="descricao">${demanda.descricao}</p>
+            <hr style="border: 0; border-top: 1px solid #e5e7eb; margin: 15px 0;">
+            <p><strong>Projeto:</strong> ${demanda.projeto} | <strong>Tipo:</strong> ${demanda.tipo}</p>
+            <p><strong>Responsável:</strong> ${demanda.responsavel || 'Não atribuído'}</p>
+            <p><strong>Prazo:</strong> ${demanda.prazoFinalizacao || 'Sem prazo'}</p>
+            <p><strong>Prioridade:</strong> ${demanda.prioridade}</p>
+            <p><strong>Status:</strong> ${demanda.status}</p>
+            <button onclick="window.location.href='detalhes-demanda.html?id=${demanda.id}'" style="margin-top: 15px;">Ver detalhes</button>
+        `;
+        
+        listaContainer.appendChild(div);
+    });
+}
