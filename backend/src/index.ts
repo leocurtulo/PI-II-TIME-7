@@ -11,7 +11,7 @@ import cors from "cors";
 // Importa as rotas de cada tela
 import { rotasCadastro } from "./rotas/cadastro";
 import { rotasLogin } from "./rotas/login";
-
+import { rotasDetalhesEComentarios } from "./rotas/detalhesEcomentarios";
 import { abrirConexao } from "./banco/conexao";
 
 // Cria a aplicação (o servidor) Express
@@ -31,6 +31,7 @@ const PORTA = 3000;
 // Registra as rotas da tela de cadastro (GET /projetos e POST /demandas)
 rotasCadastro(app);
 rotasLogin(app);
+rotasDetalhesEComentarios(app);
 
 
 
