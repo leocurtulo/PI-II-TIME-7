@@ -54,7 +54,7 @@ function dataRelativa(dias) {
   return `${d.getFullYear()}-${mes}-${dia}`;
 }
 
-function obterDemandas() {
+/*function obterDemandas() {
   return [
     { id: 1, titulo: "Tela de login", tipo: "Tarefa", prioridade: "Alta", status: "Concluída", prazo: dataRelativa(-5) },
     { id: 2, titulo: "Erro ao salvar demanda", tipo: "Defeito", prioridade: "Crítica", status: "Aberta", prazo: dataRelativa(2) },
@@ -214,8 +214,24 @@ function renderizarProximas(demandas, dias) {
 // ---------------------------------------------------------------------------
 // 6. Inicialização e eventos
 // ---------------------------------------------------------------------------
-document.addEventListener("DOMContentLoaded", () => {
-  const demandas = obterDemandas();
+document.addEventListener("DOMContentLoaded", async () => {
+  let demandas = [];
+    try {
+
+    const dados =
+        await obterDashboardApi();
+
+    demandas = dados;
+
+} catch (erro) {
+
+    console.error(
+        "Erro ao carregar dashboard",
+        erro
+    );
+
+    return;
+}
   const form = document.getElementById("form-prazo");
   const campo = document.getElementById("dias-prazo");
   const erro = document.getElementById("erro-dias");

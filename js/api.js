@@ -71,3 +71,24 @@ async function buscarFeriadosApi(ano) {
 
     return dados;
 }
+async function obterDashboardApi() {
+
+    const resposta =
+        await fetch(
+            API_BASE_URL + "/dashboard"
+        );
+
+    const dados =
+        await resposta.json();
+
+    if (!resposta.ok) {
+
+        throw new Error(
+            dados.mensagem ||
+            "Erro ao carregar dashboard."
+        );
+
+    }
+
+    return dados;
+}
