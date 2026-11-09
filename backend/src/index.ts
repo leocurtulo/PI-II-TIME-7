@@ -11,9 +11,11 @@ import cors from "cors";
 import { rotasCadastro } from "./rotas/cadastro";
 import { rotasLogin } from "./rotas/login";
 
+import { rotasDashboard } from "./rotas/dashboard";
+
 import { abrirConexao } from "./banco/conexao";
 // Import do serviço de demandas
-import { listarDemandas } from "./services/servicodemanda";
+import { listarDemandas } from "./servicos/servicodemanda";
 
 // Cria a aplicação (o servidor) Express
 const app = express();
@@ -30,6 +32,7 @@ const PORTA = 3000;
 // Registra as rotas da tela de cadastro (GET /projetos e POST /demandas)
 rotasCadastro(app);
 rotasLogin(app);
+rotasDashboard(app);
 
 // Rota de teste: confirma que o servidor está funcionando
 app.get("/", (req, res) => {

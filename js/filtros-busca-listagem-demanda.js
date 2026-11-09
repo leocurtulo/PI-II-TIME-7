@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
     carregarDemandas();
+    carregarOpcoesFiltros();
 
     // Vincula a atualização da lista aos inputs e selects do HTML
     document.getElementById('buscaTexto').addEventListener('input', carregarDemandas);
@@ -64,5 +65,28 @@ function renderizarLista(demandas) {
         `;
         
         listaContainer.appendChild(div);
+    });
+}
+
+
+// Preenche os selects de projeto e responsável com os dados do banco
+async function carregarOpcoesFiltros() {
+    const projetos = await (await fetch("http://localhost:3000/projetos")).json();
+    const usuarios = await (await fetch("http://localhost:3000/usuarios")).json();
+
+    const selectProjeto = document.getElementById("filtroProjeto");
+    projetos.forEach(projeto => {
+        const opcao = document.createElement("option");
+        opcao.value = projeto.nome;
+        opcao.textContent = projeto.nome;
+        selectProjeto.appendChild(opcao);
+    });
+
+    const selectResponsavel = document.getElementById("filtroResponsavel");
+    usuarios.forEach(usuario => {
+        const opcao = document.createElement("option");
+        opcao.value = usuario.nome;
+        opcao.textContent = usuario.nome;
+        selectResponsavel.appendChild(opcao);
     });
 }

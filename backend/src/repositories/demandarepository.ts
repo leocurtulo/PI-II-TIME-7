@@ -1,4 +1,4 @@
-import { Demanda } from "../rotas/demandas";
+import { Demanda } from "../types/demanda";
 import { abrirConexao } from "../banco/conexao";
 
 export async function buscarTodasDemandas(): Promise<Demanda[]> {
@@ -6,12 +6,12 @@ export async function buscarTodasDemandas(): Promise<Demanda[]> {
     try {
         const sql = `
             SELECT 
-                d.id, 
-                d.titulo, 
-                d.descricao, 
-                d.tipo, 
-                d.prioridade, 
-                d.status, 
+                d.id AS "id", 
+                d.titulo AS "titulo", 
+                d.descricao AS "descricao", 
+                d.tipo AS "tipo", 
+                d.prioridade AS "prioridade", 
+                d.status AS "status", 
                 p.nome AS "projeto", 
                 u.nome AS "responsavel", 
                 TO_CHAR(d.data_criacao, 'YYYY-MM-DD') AS "dataCriacao", 
