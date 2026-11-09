@@ -71,6 +71,80 @@ async function buscarFeriadosApi(ano) {
 
     return dados;
 }
+// Procura demanda por ID
+async function buscarDemandaPorIdApi(id) {
+
+    const resposta =
+        await fetch(API_BASE_URL + "/demandas/" + id);
+
+    const dados = await resposta.json();
+
+    if (!resposta.ok) {
+        throw new Error(
+            dados.mensagem ||
+            "Erro ao carregar demanda."
+        );
+    }
+
+    return dados;
+}
+
+// Lista Comentários
+async function listarComentariosApi(id) {
+
+    const resposta =
+        await fetch(
+            API_BASE_URL +
+            "/demandas/" +
+            id +
+            "/comentarios"
+        );
+
+    const dados = await resposta.json();
+
+    if (!resposta.ok) {
+        throw new Error(
+            dados.mensagem ||
+            "Erro ao carregar comentários."
+        );
+    }
+
+    return dados;
+}
+
+// Função de cadastrar Comentários.
+async function cadastrarComentarioApi(
+    id,
+    comentario
+) {
+
+    const resposta =
+        await fetch(
+            API_BASE_URL +
+            "/demandas/" +
+            id +
+            "/comentarios",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type":
+                        "application/json"
+                },
+                body: JSON.stringify(comentario)
+            }
+        );
+
+    const dados = await resposta.json();
+
+    if (!resposta.ok) {
+        throw new Error(
+            dados.mensagem ||
+            "Erro ao cadastrar comentário."
+        );
+    }
+
+    return dados;
+}
 async function obterDashboardApi() {
 
     const resposta =

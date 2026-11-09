@@ -10,6 +10,7 @@ import cors from "cors";
 // Importa as rotas de cada tela
 import { rotasCadastro } from "./rotas/cadastro";
 import { rotasLogin } from "./rotas/login";
+import { rotasDetalhesEComentarios } from "./rotas/comentarios";
 
 import { rotasDashboard } from "./rotas/dashboard";
 
@@ -32,6 +33,11 @@ const PORTA = 3000;
 // Registra as rotas da tela de cadastro (GET /projetos e POST /demandas)
 rotasCadastro(app);
 rotasLogin(app);
+rotasDetalhesEComentarios(app);
+
+
+
+
 rotasDashboard(app);
 
 // Rota de teste: confirma que o servidor está funcionando
