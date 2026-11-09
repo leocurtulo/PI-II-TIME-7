@@ -1,21 +1,13 @@
+// AUTOR: Vitor Fachini Zanon
+// DESCRIÇÃO: Rota de login, conferindo e-mail e senha no banco Oracle
+
 import { Express } from "express";
-import { usuarios } from "../data/dados";
+import { abrirConexao } from "../banco/conexao";
 
 export function rotasLogin(app: Express) {
 
-    app.get("/usuarios", (req, res) => {
-
-        const lista = usuarios.map(usuario => ({
-            id: usuario.id,
-            nome: usuario.nome,
-            email: usuario.email,
-            perfil: usuario.perfil
-        }));
-
-        res.status(200).json(lista);
-    });
-
-    app.post("/login", (req, res) => {
+    // POST /login: confere se existe um usuário com esse e-mail e essa senha
+    app.post("/login", async (req, res) => {
 
         const { email, senha } = req.body || {};
 
@@ -26,25 +18,36 @@ export function rotasLogin(app: Express) {
             return;
         }
 
-        const usuario = usuarios.find(
-            usuario =>
-                usuario.email === email &&
-                usuario.senha === senha
-        );
+        try {
+            const conexao = await abrirConexao();
 
-        if (!usuario) {
-            res.status(401).json({
-                mensagem: "Credenciais inválidas."
+            // Busca o usuário com esse e-mail e senha (a senha não volta na resposta)
+            const resultado = await conexao.execute(
+                `SELECT id AS "id", nome AS "nome", email AS "email", perfil AS "perfil"
+                 FROM usuario
+                 WHERE email = :email AND senha = :senha`,
+                { email: email, senha: senha }
+            );
+
+            await conexao.close();
+
+            const linhas = resultado.rows || [];
+
+            // Nenhuma linha: e-mail ou senha errados
+            if (linhas.length === 0) {
+                res.status(401).json({
+                    mensagem: "Credenciais inválidas."
+                });
+                return;
+            }
+
+            // Achou: devolve os dados do usuário (sem a senha)
+            res.status(200).json(linhas[0]);
+        } catch (erro) {
+            res.status(500).json({
+                mensagem: "Erro ao fazer login."
             });
-            return;
         }
-
-        res.status(200).json({
-            id: usuario.id,
-            nome: usuario.nome,
-            email: usuario.email,
-            perfil: usuario.perfil
-        });
     });
 
 }
