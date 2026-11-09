@@ -30,52 +30,52 @@
 
             <div class="campo">
                 <label>ID:</label>
-                <p></p>
+                <p id="demandaId"></p>
             </div>
 
             <div class="campo">
                 <label>Título:</label>
-                <p></p>
+                <p id="tituloDemanda"></p>
             </div>
 
             <div class="campo">
                 <label>Tipo:</label>
-                <p></p>
+                <p id="tipoDemanda"></p>
             </div>
 
             <div class="campo">
                 <label>Prioridade:</label>
-                <p></p>
+                <p id="prioridadeDemanda"></p>
             </div>
 
             <div class="campo">
                 <label>Status:</label>
-                <p></p>
+                <p id="statusDemanda"></p>
             </div>
 
             <div class="campo">
                 <label>Projeto:</label>
-                <p></p>
+                <p id="projetoDemanda"></p>
             </div>
 
             <div class="campo">
                 <label>Responsável:</label>
-                <p></p>
+                <p id="responsavelDemanda"></p>
             </div>
 
             <div class="campo">
                 <label>Data de Criação:</label>
-                <p></p>
+                <p id="dataCriacaoDemanda"></p>
             </div>
 
             <div class="campo">
                 <label>Última Atualização:</label>
-                <p></p>
+                <p id="dataAtualizacaoDemanda"></p>
             </div>
 
             <div class="campo">
                 <label>Prazo de Finalização:</label>
-                <p></p>
+                <p id="prazoDemanda"></p>
             </div>
 
         </section>
@@ -85,7 +85,7 @@
             <h2>Descrição</h2>
 
             <div class="campo">
-                <p></p>
+                <p id="descricaoDemanda"></p>
             </div>
 
         </section>
@@ -100,7 +100,7 @@
             placeholder="Pesquisar palavras-chave">
     </div>
 
-    <p id="erroBusca"></p>
+    <p  id="erroBusca"></p>
 
     <button id="btnBusca" type="button">
         Buscar
@@ -113,15 +113,9 @@
 
     <h2>Comentários</h2>
 
-    <article class="campo item-pesquisavel">
-        <p><strong></strong></p>
-        <p></p>
-    </article>
+    <div id="listaComentarios">
 
-    <article class="campo item-pesquisavel">
-        <p><strong></strong></p>
-        <p></p>
-    </article>
+</div>
 
     <div class="campo">
 
@@ -167,8 +161,10 @@
         </section>
 
     </main>
-  
+
+    <script src="js/api.js"></script>  
 <script src="js/detalhes-demanda.js"></script>   
+
     
     
 </body>

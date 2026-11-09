@@ -11,7 +11,7 @@ import cors from "cors";
 // Importa as rotas de cada tela
 import { rotasCadastro } from "./rotas/cadastro";
 import { rotasLogin } from "./rotas/login";
-import { rotasDetalhesEComentarios } from "./rotas/detalhesEcomentarios";
+import { rotasDetalhesEComentarios } from "./rotas/comentarios";
 import { abrirConexao } from "./banco/conexao";
 
 // Cria a aplicação (o servidor) Express
