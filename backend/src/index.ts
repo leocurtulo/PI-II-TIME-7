@@ -1,7 +1,6 @@
 // AUTOR: Leonardo Furlan Curtulo
 // DESCRIÇÃO: Cria o servidor express, configura a leitura de JSON, registra as rotas e liga o servidor em uma porta
 
-
 // Importa a biblioteca
 import express from "express";
 
@@ -12,7 +11,12 @@ import cors from "cors";
 import { rotasCadastro } from "./rotas/cadastro";
 import { rotasLogin } from "./rotas/login";
 import { rotasDetalhesEComentarios } from "./rotas/comentarios";
+
+import { rotasDashboard } from "./rotas/dashboard";
+
 import { abrirConexao } from "./banco/conexao";
+// Import do serviço de demandas
+import { listarDemandas } from "./servicos/servicodemanda";
 
 // Cria a aplicação (o servidor) Express
 const app = express();
@@ -26,8 +30,6 @@ app.use(express.json());
 // Porta em que o servidor vai rodar (http://localhost:3000)
 const PORTA = 3000;
 
-
-
 // Registra as rotas da tela de cadastro (GET /projetos e POST /demandas)
 rotasCadastro(app);
 rotasLogin(app);
@@ -36,6 +38,7 @@ rotasDetalhesEComentarios(app);
 
 
 
+rotasDashboard(app);
 
 // Rota de teste: confirma que o servidor está funcionando
 app.get("/", (req, res) => {
@@ -54,7 +57,15 @@ app.get("/teste-banco", async (req, res) => {
     }
 });
 
-
+// Rota da API para listagem de demandas
+app.get("/api/demandas", async (req, res) => {
+    try {
+        const demandas = await listarDemandas(req.query);
+        res.status(200).json(demandas);
+    } catch (erro) {
+        res.status(500).json({ mensagem: "Erro ao listar demandas", erro: String(erro) });
+    }
+});
 
 // Liga o servidor e fica esperando requisições na porta definida
 app.listen(PORTA, () => {
