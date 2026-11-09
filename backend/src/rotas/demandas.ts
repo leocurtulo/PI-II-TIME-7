@@ -5,7 +5,7 @@ Cria a rota GET /demandas para listar as demandas.
 */
 
 import { Router, Request, Response } from "express";
-import { listarDemandas } from "../serviços/servicodemanda";
+import { listarDemandas } from "../servicos/servicodemanda";
 
 const router = Router();
 
