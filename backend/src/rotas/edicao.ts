@@ -1,7 +1,9 @@
 // AUTOR: Leonardo Furlan Curtulo
-// DESCRIÇÃO: Rotas da edição de demanda: busca uma demanda pelo id (GET /demandas/:id)
-// e, nas próximas etapas, a edição (PUT /demandas/:id), usando o banco Oracle
+// DESCRIÇÃO: Rotas da edição de demanda: busca uma demanda pelo id (GET /demandas/:id) e, nas próximas etapas, a edição (PUT /demandas/:id), usando o banco Oracle
 
+
+// Importa as listas de validação (tipos e prioridades aceitos)
+import { TIPOS, PRIORIDADES } from "../data/dados";
 
 // Importa o tipo Express (o tipo do app, que vem do index.ts)
 import { Express } from "express";
@@ -62,4 +64,94 @@ export function rotasEdicao(app: Express) {
             res.status(500).json({ mensagem: "Erro ao buscar a demanda." });
         }
     });
+
+    // PUT /demandas/:id: edita os dados de uma demanda
+    app.put("/demandas/:id", async (req, res) =>{
+        const id = Number(req.params.id);
+
+        const dados = req.body || {};
+
+        const erros: string[] = [];
+
+
+        if (isNaN(id)) {
+            res.status(400).json({ mensagem: "Id inválido." });
+            return;
+        }
+
+        if (dados.titulo === undefined || String(dados.titulo).trim() === "") {
+            erros.push("O título é obrigatório.");
+        }
+        if (dados.descricao === undefined || String(dados.descricao).trim() === "") {
+            erros.push("A descrição é obrigatória.");
+        }
+        if (!TIPOS.includes(dados.tipo)) {
+            erros.push("Tipo inválido. Use: Tarefa, Defeito, Melhoria ou Documentação.");
+        }
+        if (!PRIORIDADES.includes(dados.prioridade)) {
+            erros.push("Prioridade inválida. Use: Crítica, Alta, Média ou Baixa.");
+        }
+
+        let prazo: string | null = null;
+        if (dados.prazo !== undefined && dados.prazo !== null && String(dados.prazo) !== "") {
+            prazo = String(dados.prazo);
+
+            if (prazo.length !== 10 || prazo[4] !== "-" || prazo[7] !== "-") {
+                erros.push("Prazo inválido. Use o formato AAAA-MM-DD.");
+            }
+        }
+
+        let responsavelId: number | null = null;
+        if (dados.responsavelId !== undefined && dados.responsavelId !== null && String(dados.responsavelId) !== "") {
+            responsavelId = Number(dados.responsavelId);
+        }
+
+        if (erros.length > 0) {
+            res.status(400).json({ mensagem: "Dados inválidos.", erros });
+            return;
+        }
+
+        let conexao;
+        try {
+            conexao = await abrirConexao();
+
+            const resultado = await conexao.execute(
+                `UPDATE demanda
+                 SET titulo = :titulo,
+                     descricao = :descricao,
+                     tipo = :tipo,
+                     prioridade = :prioridade,
+                     responsavel_id = :responsavelId,
+                     prazo = TO_DATE(:prazo, 'YYYY-MM-DD'),
+                     data_atualizacao = SYSDATE
+                 WHERE id = :id`,
+                {
+                    titulo: String(dados.titulo).trim(),
+                    descricao: String(dados.descricao).trim(),
+                    tipo: dados.tipo,
+                    prioridade: dados.prioridade,
+                    responsavelId: responsavelId,
+                    prazo: prazo,
+                    id: id
+                },
+                { autoCommit: true }
+            );
+
+            // Nenhuma linha alterada: não existe demanda com esse id
+            if (resultado.rowsAffected === 0) {
+                res.status(404).json({ mensagem: "Demanda não encontrada." });
+                return;
+            }
+
+            res.status(200).json({ mensagem: "Demanda atualizada com sucesso." });
+        }catch (erro) {
+            res.status(500).json({ mensagem: "Erro ao atualizar a demanda." });
+        } finally {
+            // Fecha a conexão sempre, dando certo ou errado
+            if (conexao) {
+                await conexao.close();
+            }
+        }
+    });
+    
 }
