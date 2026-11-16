@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<!-- Autor: Leonardo Furlan Curtulo
+Descrição: tela de edição de demanda. Carrega a demanda pelo id da URL (editar-demanda.html?id=5)
+e permite alterar só os campos editáveis. -->
+
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar demanda - Sistema de acompanhamento de Demandas</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="js/api.js" defer></script>
+    <script src="js/edicao-demanda.js" defer></script>
+</head>
+<body>
+
+    <header class="cabecalho">
+        <h2>Sistema de Demandas</h2>
+        <nav class="menu">
+            <a href="dashboard-demanda.html">Dashboard</a>
+            <a href="Listagem-demandas.html">Demandas</a>
+            <a href="cadastro-demanda.html">Nova demanda</a>
+        </nav>
+    </header>
+
+    <main>
+        <h1 class="titulo">Editar demanda</h1>
+        <p>Altere os dados abaixo e clique em salvar.</p>
+
+        <form id="formEdicao" class="formulario" novalidate>
+
+            <div class="campo">
+                <label for="id">Nº da demanda</label>
+                <input type="text" id="id" name="id" disabled>
+            </div>
+
+            <div class="campo">
+                <label for="projeto">Projeto associado</label>
+                <input type="text" id="projeto" name="projeto" disabled>
+            </div>
+
+            <div class="campo">
+                <label for="status">Status</label>
+                <input type="text" id="status" name="status" disabled>
+            </div>
+
+            <!-- Campos EDITÁVEIS -->
+            <div class="campo">
+                <label for="titulo">Título</label>
+                <input type="text" id="titulo" name="titulo" required>
+                <span id="erroTitulo" class="mensagem-erro"></span>
+            </div>
+
+            <div class="campo">
+                <label for="descricao">Descrição</label>
+                <textarea id="descricao" name="descricao" required></textarea>
+                <span id="erroDesc" class="mensagem-erro"></span>
+            </div>
+
+            <div class="campo">
+                <label for="tipo">Tipo da demanda</label>
+                <select id="tipo" name="tipo" required>
+                    <option value="">Selecione o tipo...</option>
+                    <option value="Tarefa">Tarefa</option>
+                    <option value="Defeito">Defeito</option>
+                    <option value="Melhoria">Melhoria</option>
+                    <option value="Documentação">Documentação</option>
+                </select>
+                <span id="erroTipo" class="mensagem-erro"></span>
+            </div>
+
+            <div class="campo">
+                <label for="prioridade">Prioridade</label>
+                <select id="prioridade" name="prioridade" required>
+                    <option value="">Selecione a prioridade...</option>
+                    <option value="Crítica">Crítica</option>
+                    <option value="Alta">Alta</option>
+                    <option value="Média">Média</option>
+                    <option value="Baixa">Baixa</option>
+                </select>
+                <span id="erroPrioridade" class="mensagem-erro"></span>
+            </div>
+
+            <div class="campo">
+                <label for="responsavel">Responsável</label>
+                <select id="responsavel" name="responsavel">
+                    <option value="">Sem responsável definido</option>
+                </select>
+            </div>
+
+            <div class="campo">
+                <label for="prazo">Prazo de finalização</label>
+                <input type="date" id="prazo" name="prazo">
+                <span id="erroPrazo" class="mensagem-erro"></span>
+            </div>
+
+            <div class="campo">
+                <label for="data-criacao">Data de criação</label>
+                <input type="text" id="data-criacao" name="data-criacao" disabled>
+            </div>
+
+            <div class="campo">
+                <label for="data-atualizacao">Última atualização</label>
+                <input type="text" id="data-atualizacao" name="data-atualizacao" disabled>
+            </div>
+
+            <button type="submit">Salvar alterações</button>
+            <a id="linkVoltar" href="Listagem-demandas.html">Voltar</a>
+
+            <p id="mensagemSucesso"></p>
+            <p id="mensagemErro" class="mensagem-erro"></p>
+
+        </form>
+    </main>
+
+</body>
+</html>

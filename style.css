@@ -326,3 +326,9 @@ button:hover {
 .invalido::before { 
     content: "✗ "; 
 }
+
+/* Botão desligado (disabled): fica apagado e mostra que não dá para clicar */
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
