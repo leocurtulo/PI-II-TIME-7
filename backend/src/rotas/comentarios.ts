@@ -7,23 +7,7 @@ import { demandas, comentarios } from "../data/dados";
 export function rotasDetalhesEComentarios(app: Express) {
 
    
-    app.get("/demandas/:id", (req, res) => {
-
-        const id = Number(req.params.id);
-
-        const demanda = demandas.find(
-            d => d.id === id
-        );
-
-        if (demanda === undefined) {
-            res.status(404).json({
-                mensagem: "Demanda não encontrada."
-            });
-            return;
-        }
-
-        res.status(200).json(demanda);
-    });
+    
 
     
     app.get("/demandas/:id/comentarios", (req, res) => {

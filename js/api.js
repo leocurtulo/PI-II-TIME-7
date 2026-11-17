@@ -166,3 +166,32 @@ async function obterDashboardApi() {
 
     return dados;
 }
+
+
+
+// PUT /demandas/:id: envia os dados alterados de uma demanda para a API
+async function editarDemandaApi(id, demanda) {
+    const resposta = await fetch(API_BASE_URL + "/demandas/" + id, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(demanda)
+    });
+    const dados = await resposta.json();
+
+    // Se deu erro, junta a mensagem principal com a lista de erros da API
+    if (!resposta.ok) {
+        let texto = dados.mensagem || "Erro ao editar a demanda.";
+
+        if (dados.erros) {
+            dados.erros.forEach((erro) => {
+                texto += " " + erro;
+            });
+        }
+
+        throw new Error(texto);
+    }
+
+    return dados;
+}
