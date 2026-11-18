@@ -13,6 +13,9 @@ import session from "express-session";
 // Carrega as variáveis do .env (inclusive o SESSION_SECRET)
 import "dotenv/config";
 
+// Importa o path (monta o caminho da pasta das telas)
+import path from "node:path";
+
 // Importa as rotas de cada tela
 import { rotasCadastro } from "./rotas/cadastro";
 import { rotasLogin } from "./rotas/login";
@@ -107,6 +110,22 @@ app.get("/api/demandas", async (req, res) => {
         res.status(500).json({ mensagem: "Erro ao listar demandas", erro: String(erro) });
     }
 });
+
+
+// Pasta raiz do projeto, onde ficam os HTML, o style.css e a pasta js
+// (__dirname é a pasta backend/lib, onde o index.js compilado roda; "../.." sobe até a raiz)
+const pastaTelas = path.resolve(__dirname, "../..");
+
+// Bloqueia o acesso à pasta backend pelo navegador (código e configurações do servidor)
+app.use("/backend", (req, res) => {
+    res.status(404).end();
+});
+
+
+// Serve as telas pelo próprio Express (ex.: http://localhost:3000/login.html)
+// dotfiles: "deny" bloqueia arquivos que começam com ponto, como o .env e a pasta .git
+app.use(express.static(pastaTelas, { dotfiles: "deny" }));
+
 
 // Liga o servidor e fica esperando requisições na porta definida
 app.listen(PORTA, () => {
