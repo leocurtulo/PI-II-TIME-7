@@ -7,6 +7,12 @@ import express from "express";
 // Importa o CORS (libera a tela, que roda em outra porta, a chamar a API)
 import cors from "cors";
 
+// Importa o express-session (guarda no servidor quem está logado)
+import session from "express-session";
+
+// Carrega as variáveis do .env (inclusive o SESSION_SECRET)
+import "dotenv/config";
+
 // Importa as rotas de cada tela
 import { rotasCadastro } from "./rotas/cadastro";
 import { rotasLogin } from "./rotas/login";
@@ -28,6 +34,27 @@ app.use(cors());
 
 // Permite que o servidor leia JSON
 app.use(express.json());
+
+
+// Segredo que assina o cookie da sessão (fica no .env, nunca no código)
+const segredo = process.env.SESSION_SECRET;
+if (!segredo) {
+    throw new Error("Defina SESSION_SECRET no arquivo .env.");
+}
+
+// Configura a sessão 
+app.use(session({
+    name: "sistema.sid",
+    secret: segredo,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        httpOnly: true,
+        sameSite: "lax",
+        secure: false, // Ambiente local (HTTP). Em produção, com HTTPS, seria true
+        maxAge: 30 * 60 * 1000 // 30 minutos
+    }
+}));
 
 // Porta em que o servidor vai rodar (http://localhost:3000)
 const PORTA = 3000;
