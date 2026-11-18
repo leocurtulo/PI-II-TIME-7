@@ -22,6 +22,8 @@ import { rotasDashboard } from "./rotas/dashboard";
 
 import { rotasEdicao } from "./rotas/edicao";
 
+import { rotasAutenticacao } from "./rotas/autenticacao";
+
 import { abrirConexao } from "./banco/conexao";
 // Import do serviço de demandas
 import { listarDemandas } from "./servicos/servicodemanda";
@@ -61,6 +63,9 @@ const PORTA = 3000;
 
 // Registra as rotas da tela de cadastro (GET /projetos e POST /demandas)
 rotasCadastro(app);
+
+// Registra as rotas da sessão (GET /sessao e POST /logout)
+rotasAutenticacao(app);
 
 
 // Registra as rotas da edição (GET /demandas/:id)
