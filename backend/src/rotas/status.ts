@@ -6,11 +6,14 @@ import { abrirConexao } from "../banco/conexao";
 
 export function rotasStatus(app: Express) {
 
+    // PUT /demandas/:id/status: altera o status da demanda seguindo
+    // as regras do ciclo de vida e as permissões dos perfis.
     app.put("/demandas/:id/status", async (req, res) => {
 
         const id = Number(req.params.id);
         const novoStatus = String(req.body.status || "");
 
+        // Valida se o id informado é numérico.
         if (isNaN(id)) {
             res.status(400).json({
                 mensagem: "Id inválido."
@@ -18,6 +21,7 @@ export function rotasStatus(app: Express) {
             return;
         }
 
+        // Impede alterações sem usuário autenticado.
         if (!req.session.usuario) {
             res.status(401).json({
                 mensagem: "Faça login para continuar."
@@ -25,6 +29,7 @@ export function rotasStatus(app: Express) {
             return;
         }
 
+        // Status aceitos pelo sistema.
         const statusPermitidos = [
             "Aberta",
             "Em andamento",
@@ -33,6 +38,7 @@ export function rotasStatus(app: Express) {
             "Cancelada"
         ];
 
+        // Verifica se o novo status é válido.
         if (!statusPermitidos.includes(novoStatus)) {
             res.status(400).json({
                 mensagem: "Status inválido."
@@ -46,10 +52,13 @@ export function rotasStatus(app: Express) {
 
             conexao = await abrirConexao();
 
+            // Busca a demanda atual para descobrir status,
+            // responsável e projeto vinculado.
             const resultado = await conexao.execute(
                 `SELECT id,
                         status,
-                        responsavel_id
+                        responsavel_id,
+                        projeto_id
                  FROM demanda
                  WHERE id = :id`,
                 { id }
@@ -57,6 +66,7 @@ export function rotasStatus(app: Express) {
 
             const linhas = resultado.rows || [];
 
+            // Se a demanda não existir retorna 404.
             if (linhas.length === 0) {
                 res.status(404).json({
                     mensagem: "Demanda não encontrada."
@@ -72,9 +82,38 @@ export function rotasStatus(app: Express) {
             const responsavelId =
                 demanda.RESPONSAVEL_ID || demanda.responsavel_id;
 
+            const projetoId =
+                demanda.PROJETO_ID || demanda.projeto_id;
+
             const perfil = req.session.usuario.perfil;
             const usuarioId = req.session.usuario.id;
 
+            // Regra do Líder de Projeto: só pode alterar demandas
+            // dos projetos em que está vinculado.
+            if (perfil === "Líder de Projeto") {
+
+                const liderProjeto = await conexao.execute(
+                    `SELECT 1
+                     FROM projeto_usuario
+                     WHERE projeto_id = :projetoId
+                       AND usuario_id = :usuarioId`,
+                    {
+                        projetoId: projetoId,
+                        usuarioId: usuarioId
+                    }
+                );
+
+                const linhasProjeto = liderProjeto.rows || [];
+
+                if (linhasProjeto.length === 0) {
+                    res.status(403).json({
+                        mensagem: "Sem permissão para alterar demandas deste projeto."
+                    });
+                    return;
+                }
+            }
+
+            // Define as transições válidas do ciclo de vida da demanda.
             const transicoesValidas: Record<string, string[]> = {
                 "Aberta": ["Em andamento", "Cancelada"],
                 "Em andamento": ["Em revisão", "Cancelada"],
@@ -83,6 +122,7 @@ export function rotasStatus(app: Express) {
                 "Cancelada": []
             };
 
+            // Impede transições fora das regras do sistema.
             if (
                 !transicoesValidas[statusAtual] ||
                 !transicoesValidas[statusAtual].includes(novoStatus)
@@ -93,8 +133,10 @@ export function rotasStatus(app: Express) {
                 return;
             }
 
+            // Regras específicas para o perfil Membro da Equipe.
             if (perfil === "Membro da Equipe") {
 
+                // O membro só pode alterar demandas sob sua responsabilidade.
                 if (responsavelId !== usuarioId) {
                     res.status(403).json({
                         mensagem: "Sem permissão para alterar esta demanda."
@@ -109,6 +151,7 @@ export function rotasStatus(app: Express) {
                     (statusAtual === "Em andamento" &&
                         novoStatus === "Em revisão");
 
+                // Impede mudanças de status não permitidas para membros.
                 if (!permitido) {
                     res.status(403).json({
                         mensagem: "Sem permissão para realizar esta transição."
@@ -117,6 +160,7 @@ export function rotasStatus(app: Express) {
                 }
             }
 
+            // Atualiza o status da demanda e registra a data da alteração.
             await conexao.execute(
                 `UPDATE demanda
                  SET status = :status,
@@ -131,6 +175,7 @@ export function rotasStatus(app: Express) {
                 }
             );
 
+            // Registra a alteração realizada na tabela de histórico.
             await conexao.execute(
                 `INSERT INTO historico
                  (
@@ -171,6 +216,7 @@ export function rotasStatus(app: Express) {
 
         } finally {
 
+            // Fecha a conexão independentemente do resultado.
             if (conexao) {
                 await conexao.close();
             }

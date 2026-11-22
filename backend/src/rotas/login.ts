@@ -40,7 +40,7 @@ export function rotasLogin(app: Express) {
                 });
                 return;
             }
-            
+        // Guarda o usuário na sessão (Aula 11): é assim que o servidor sabe quem está logado
           const usuario: any = linhas[0];
 
             req.session.usuario = {
