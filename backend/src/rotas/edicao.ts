@@ -154,4 +154,44 @@ export function rotasEdicao(app: Express) {
         }
     });
     
+    app.put("/demandas/:id/status", async (req, res) => {
+
+    const id = Number(req.params.id);
+    const novoStatus = String(req.body.status || "");
+
+    if (isNaN(id)) {
+        res.status(400).json({
+            mensagem: "Id inválido."
+        });
+        return;
+    }
+
+    if (!req.session.usuario) {
+        res.status(401).json({
+            mensagem: "Faça login para continuar."
+        });
+        return;
+    }
+
+    const statusPermitidos = [
+        "Aberta",
+        "Em andamento",
+        "Em revisão",
+        "Concluída",
+        "Cancelada"
+    ];
+
+    if (!statusPermitidos.includes(novoStatus)) {
+        res.status(400).json({
+            mensagem: "Status inválido."
+        });
+        return;
+    }
+
+    res.status(200).json({
+        mensagem: "Validação do status realizada com sucesso.",
+        statusSolicitado: novoStatus
+    });
+
+});
 }

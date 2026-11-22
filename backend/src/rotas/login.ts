@@ -40,14 +40,27 @@ export function rotasLogin(app: Express) {
                 });
                 return;
             }
+            
+          const usuario: any = linhas[0];
 
-            // Achou: devolve os dados do usuário (sem a senha)
-            res.status(200).json(linhas[0]);
+            req.session.usuario = {
+            id: usuario.id,
+            nome: usuario.nome,
+            email: usuario.email,
+            perfil: usuario.perfil
+        };
+
+        res.status(200).json(req.session.usuario);
+
         } catch (erro) {
-            res.status(500).json({
-                mensagem: "Erro ao fazer login."
-            });
-        }
+
+    console.error(erro);
+
+    res.status(500).json({
+        mensagem: "Erro ao fazer login."
+    });
+
+}
     });
 
 }
