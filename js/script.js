@@ -1,3 +1,6 @@
+// AUTOR: Vitor Fachini Zanon
+// DESCRIÇÃO: Validação e autenticação da tela de login
+
 const formulario = document.getElementById("formLogin");
 const usuario = document.getElementById("usuario");
 const senha = document.getElementById("senha");
@@ -81,11 +84,6 @@ formulario.addEventListener("submit", async function (event) {
         const dados = await resposta.json();
 
         if (resposta.ok) {
-
-            localStorage.setItem(
-                "usuarioLogado",
-                JSON.stringify(dados)
-            );
 
             alert("Login realizado com sucesso!");
 

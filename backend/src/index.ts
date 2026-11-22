@@ -28,6 +28,8 @@ import { rotasEdicao } from "./rotas/edicao";
 import { rotasAutenticacao } from "./rotas/autenticacao";
 
 import { abrirConexao } from "./banco/conexao";
+
+import { rotasStatus } from "./rotas/status";
 // Import do serviço de demandas
 import { listarDemandas } from "./servicos/servicodemanda";
 
@@ -74,6 +76,7 @@ rotasAutenticacao(app);
 // Registra as rotas da edição (GET /demandas/:id)
 rotasEdicao(app);
 
+rotasStatus(app);
 
 
 rotasLogin(app);
