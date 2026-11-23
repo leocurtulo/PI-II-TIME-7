@@ -1,4 +1,6 @@
-
+/*Autor: Augusto Brufato
+Descrição: Javascript dos detalhes das demandas
+*/
 console.log("JavaScript carregado com sucesso!");
 const parametros =
     new URLSearchParams(window.location.search);
@@ -19,6 +21,7 @@ console.log("ID da demanda:", idDemanda);
 
 carregarDemanda();
 carregarComentarios();
+carregarHistorico();
 
 const btnComentario =
     document.getElementById("btnComentario");
@@ -29,6 +32,95 @@ const campoComentario =
 const erroComentario =
     document.getElementById("erro-comentario");
 
+const btnEditar =
+    document.getElementById("btnEditar");
+
+const btnAlterarstatus =
+    document.getElementById("btnAlterarstatus");
+
+const btnCancelar =
+    document.getElementById("btnCancelar");
+
+btnEditar.addEventListener("click", () => {
+
+    window.location.href =
+        `edicao-demanda.html?id=${idDemanda}`;
+
+});
+btnAlterarstatus.addEventListener(
+    "click",
+    async () => {
+
+        const novoStatus = prompt(
+            "Digite o novo status:\n\n" +
+            "Aberta\n" +
+            "Em andamento\n" +
+            "Em revisão\n" +
+            "Concluída\n" +
+            "Cancelada"
+        );
+
+        if (!novoStatus) {
+            return;
+        }
+
+        try {
+
+            await alterarStatusApi(
+                idDemanda,
+                novoStatus
+            );
+
+            alert(
+                "Status atualizado com sucesso."
+            );
+
+            carregarDemanda();
+            carregarHistorico();
+
+        } catch (erro) {
+
+            alert(erro.message);
+
+        }
+
+    }
+);
+
+btnCancelar.addEventListener(
+    "click",
+    async () => {
+
+        const confirmar = confirm(
+            "Deseja realmente cancelar esta demanda?"
+        );
+
+        if (!confirmar) {
+            return;
+        }
+
+        try {
+
+            await alterarStatusApi(
+                idDemanda,
+                "Cancelada"
+            );
+
+            alert(
+                "Demanda cancelada com sucesso."
+            );
+
+            carregarDemanda();
+            carregarHistorico();
+
+        } catch (erro) {
+
+            alert(erro.message);
+
+        }
+
+    }
+);
 btnComentario.addEventListener("click",async () => {
 
     erroComentario.textContent = "";
@@ -57,7 +149,6 @@ btnComentario.addEventListener("click",async () => {
     await cadastrarComentarioApi(
         idDemanda,
         {
-            usuarioId: 3,
             texto: texto
         }
     );
@@ -158,11 +249,11 @@ async function carregarDemanda() {
             .textContent = demanda.status;
 
         document.getElementById("projetoDemanda")
-            .textContent = demanda.projetoId;
+            .textContent = demanda.projeto;
 
         document.getElementById("responsavelDemanda")
             .textContent =
-                demanda.responsavelId ?? "Não definido";
+                demanda.responsavel ?? "Não definido";
 
         document.getElementById("dataCriacaoDemanda")
             .textContent = demanda.dataCriacao;
@@ -213,7 +304,7 @@ async function carregarComentarios() {
 
                         <p>
                             <strong>
-                                Usuário ${comentario.usuarioId}
+                                 ${comentario.nome}
                             </strong>
                         </p>
 
@@ -226,6 +317,47 @@ async function carregarComentarios() {
 
             }
         );
+
+    } catch (erro) {
+
+        console.error(erro);
+
+    }
+
+}
+async function carregarHistorico() {
+
+    try {
+
+        const historico =
+            await listarHistoricoApi(
+                idDemanda
+            );
+
+        const lista =
+            document.getElementById(
+                "listaHistorico"
+            );
+
+        lista.innerHTML = "";
+
+        historico.forEach(item => {
+
+            const data =
+                new Date(item.dataHora)
+                    .toLocaleString("pt-BR");
+
+            lista.innerHTML += `
+                <li class="item-pesquisavel">
+                    ${item.usuario}
+                    alterou ${item.campo}
+                    de "${item.valorAnterior}"
+                    para "${item.valorNovo}"
+                    — ${data}
+                </li>
+            `;
+
+        });
 
     } catch (erro) {
 
