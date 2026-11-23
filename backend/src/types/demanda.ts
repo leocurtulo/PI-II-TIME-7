@@ -1,8 +1,8 @@
 
 /*
-Autor: Caio Aragão
-Define a estrutura de uma demanda.
-Os campos serão preenchidos com os dados do banco.
+Autor: Caio Ferreira Aragão
+DESCRIÇÃO: Campos de uma demanda usados na listagem.
+Os valores vêm do banco, já com o nome do projeto e do responsável.
 */
 
 export interface Demanda {
