@@ -3,11 +3,15 @@
  * Descrição: Comportamento da tela dashboard-demanda.html.
 
  */
-const usuarioLogado = localStorage.getItem("usuarioLogado");
+ async function conferirLogin() {
+    const resposta = await fetch(API_BASE_URL + "/sessao");
 
-if (!usuarioLogado) {
-    window.location.href = "login.html";
+    if (!resposta.ok) {
+        window.location.href = "login.html";
+    }
 }
+
+conferirLogin();
 
 // 1. Constantes do escopo (valores aceitos pelo sistema)
 const TIPOS = ["Tarefa", "Defeito", "Melhoria", "Documentação"];
@@ -45,27 +49,6 @@ const DIAS_MAX = 90;
 
 // 2. Dados simulados (substituir pela API quando o backend estiver pronto)
 
-/** Gera uma data "YYYY-MM-DD" a partir de hoje + N dias (apenas para o mock). */
-function dataRelativa(dias) {
-  const d = new Date();
-  d.setDate(d.getDate() + dias);
-  const mes = String(d.getMonth() + 1).padStart(2, "0");
-  const dia = String(d.getDate()).padStart(2, "0");
-  return `${d.getFullYear()}-${mes}-${dia}`;
-}
-
-/*function obterDemandas() {
-  return [
-    { id: 1, titulo: "Tela de login", tipo: "Tarefa", prioridade: "Alta", status: "Concluída", prazo: dataRelativa(-5) },
-    { id: 2, titulo: "Erro ao salvar demanda", tipo: "Defeito", prioridade: "Crítica", status: "Aberta", prazo: dataRelativa(2) },
-    { id: 3, titulo: "Filtro por prioridade", tipo: "Melhoria", prioridade: "Média", status: "Em andamento", prazo: dataRelativa(5) },
-    { id: 4, titulo: "Manual do usuário", tipo: "Documentação", prioridade: "Baixa", status: "Aberta", prazo: dataRelativa(20) },
-    { id: 5, titulo: "Falha no histórico", tipo: "Defeito", prioridade: "Crítica", status: "Em revisão", prazo: dataRelativa(1) },
-    { id: 6, titulo: "Layout responsivo", tipo: "Melhoria", prioridade: "Alta", status: "Em andamento", prazo: dataRelativa(-2) },
-    { id: 7, titulo: "Cadastro de comentários", tipo: "Tarefa", prioridade: "Média", status: "Cancelada", prazo: dataRelativa(10) },
-    { id: 8, titulo: "Validação de formulário", tipo: "Tarefa", prioridade: "Alta", status: "Em revisão", prazo: dataRelativa(6) },
-  ];
-}
 
 // 3. Funções de cálculo (não mexem na tela, só calculam)
 
@@ -224,6 +207,22 @@ document.addEventListener("DOMContentLoaded", async () => {
     demandas = dados;
 
 } catch (erro) {
+
+    document.body.innerHTML = `
+        <div style="
+            text-align:center;
+            margin-top:50px;
+            font-family:Arial;
+        ">
+            <h2>
+                Não foi possível carregar o dashboard.
+            </h2>
+
+            <p>
+                Verifique se o servidor está ligado.
+            </p>
+        </div>
+    `;
 
     console.error(
         "Erro ao carregar dashboard",
