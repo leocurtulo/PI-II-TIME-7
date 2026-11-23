@@ -2,7 +2,7 @@
 // DESCRIÇÃO: Rotas de detalhes da demanda e comentários
 
 import { Express } from "express";
-import { demandas, comentarios } from "../data/dados";
+import { abrirConexao } from "../banco/conexao";
 
 export function rotasDetalhesEComentarios(app: Express) {
 
@@ -10,67 +10,147 @@ export function rotasDetalhesEComentarios(app: Express) {
     
 
     
-    app.get("/demandas/:id/comentarios", (req, res) => {
+    app.get("/demandas/:id/comentarios", async (req, res) => {
 
         const id = Number(req.params.id);
 
-        const demanda = demandas.find(
-            d => d.id === id
-        );
+        try {
 
-        if (demanda === undefined) {
-            res.status(404).json({
-                mensagem: "Demanda não encontrada."
-            });
-            return;
-        }
+    const conexao = await abrirConexao();
 
-        const listaComentarios = comentarios.filter(
-            comentario => comentario.demandaId === id
-        );
+    const resultado = await conexao.execute(
+        `SELECT
+            c.id AS "id",
+            c.demanda_id AS "demandaId",
+            c.usuario_id AS "usuarioId",
+            u.nome AS "nome",
+            c.texto AS "texto",
+            c.data_hora AS "dataHora"
+         FROM comentario c
+         INNER JOIN usuario u
+            ON u.id = c.usuario_id
+         WHERE c.demanda_id = :id
+         ORDER BY c.data_hora DESC`,
+        [id]
+    );
 
-        res.status(200).json(listaComentarios);
+    await conexao.close();
+
+    res.status(200).json(resultado.rows);
+
+} catch (erro) {
+
+    res.status(500).json({
+        mensagem: "Erro ao carregar comentários."
     });
 
+}
+    });
+
+    app.get("/demandas/:id/historico", async (req, res) => {
+
+    const id = Number(req.params.id);
+
+    try {
+
+        const conexao = await abrirConexao();
+
+        const resultado = await conexao.execute(
+            `SELECT
+                h.id AS "id",
+                u.nome AS "usuario",
+                h.campo AS "campo",
+                h.valor_anterior AS "valorAnterior",
+                h.valor_novo AS "valorNovo",
+                h.data_hora AS "dataHora"
+             FROM historico h
+             INNER JOIN usuario u
+                ON u.id = h.usuario_id
+             WHERE h.demanda_id = :id
+             ORDER BY h.data_hora DESC`,
+            [id]
+        );
+
+        await conexao.close();
+
+        res.status(200).json(resultado.rows);
+
+    } catch (erro) {
+
+        console.error(erro);
+
+        res.status(500).json({
+            mensagem: "Erro ao carregar histórico."
+        });
+
+    }
+
+});
+
     
-    app.post("/demandas/:id/comentarios", (req, res) => {
+    app.post("/demandas/:id/comentarios", async (req, res) => {
 
         const id = Number(req.params.id);
 
         const dados = req.body || {};
 
-        const demanda = demandas.find(
-            d => d.id === id
+        if (!req.session.usuario) {
+        res.status(401).json({
+            mensagem: "Usuário não autenticado."
+        });
+        return;
+    }
+
+    if (
+        dados.texto === undefined ||
+        String(dados.texto).trim() === ""
+    ) {
+        res.status(400).json({
+            mensagem: "Comentário não pode ser vazio."
+        });
+        return;
+    }
+
+    try {
+
+        const conexao = await abrirConexao();
+
+        await conexao.execute(
+            `INSERT INTO comentario (
+                demanda_id,
+                usuario_id,
+                texto
+            )
+            VALUES (
+                :demandaId,
+                :usuarioId,
+                :texto
+            )`,
+            {
+                demandaId: id,
+                usuarioId: req.session.usuario.id,
+                texto: String(dados.texto).trim()
+            },
+            {
+                autoCommit: true
+            }
         );
 
-        if (demanda === undefined) {
-            res.status(404).json({
-                mensagem: "Demanda não encontrada."
-            });
-            return;
-        }
+        await conexao.close();
 
-        if (
-            dados.texto === undefined ||
-            String(dados.texto).trim() === ""
-        ) {
-            res.status(400).json({
-                mensagem: "Comentário não pode ser vazio."
-            });
-            return;
-        }
+        res.status(201).json({
+            mensagem: "Comentário cadastrado com sucesso."
+        });
 
-        const novoComentario = {
-            id: comentarios.length + 1,
-            demandaId: id,
-            usuarioId: Number(dados.usuarioId),
-            texto: String(dados.texto).trim(),
-            dataHora: new Date().toISOString()
-        };
+    } catch (erro) {
 
-        comentarios.push(novoComentario);
+        console.error(erro);
 
-        res.status(201).json(novoComentario);
-    });
+        res.status(500).json({
+            mensagem: "Erro ao salvar comentário."
+        });
 
+    }
+
+});
 }

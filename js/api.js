@@ -111,6 +111,28 @@ async function listarComentariosApi(id) {
 
     return dados;
 }
+async function listarHistoricoApi(id) {
+
+    const resposta =
+        await fetch(
+            API_BASE_URL +
+            "/demandas/" +
+            id +
+            "/historico"
+        );
+
+    const dados = await resposta.json();
+
+    if (!resposta.ok) {
+        throw new Error(
+            dados.mensagem ||
+            "Erro ao carregar histórico."
+        );
+    }
+
+    return dados;
+}
+
 
 // Função de cadastrar Comentários.
 async function cadastrarComentarioApi(
@@ -167,7 +189,38 @@ async function obterDashboardApi() {
     return dados;
 }
 
+// PUT /demandas/:id/status
+async function alterarStatusApi(id, status) {
 
+    const resposta = await fetch(
+        API_BASE_URL +
+        "/demandas/" +
+        id +
+        "/status",
+        {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                status: status
+            })
+        }
+    );
+
+    const dados = await resposta.json();
+
+    if (!resposta.ok) {
+
+        throw new Error(
+            dados.mensagem ||
+            "Erro ao alterar status."
+        );
+
+    }
+
+    return dados;
+}
 
 // PUT /demandas/:id: envia os dados alterados de uma demanda para a API
 async function editarDemandaApi(id, demanda) {
