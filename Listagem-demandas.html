@@ -1,15 +1,44 @@
 <!DOCTYPE html>
+<!--
+AUTOR: Caio Ferreira Aragão
+DESCRIÇÃO: Tela de listagem de demandas. Os dados vêm da API (GET /demandas),
+com busca, filtros, ordenação e acesso aos detalhes de cada demanda.
+-->
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Listar Demandas</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* Organização dos filtros nesta tela, sem alterar o CSS compartilhado. */
+        .filtros-linha {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .filtros-linha .campo {
+            flex: 1;
+            min-width: 140px;
+        }
+
+        .aviso-lista {
+            padding: 20px;
+            color: #555555;
+        }
+    </style>
 </head>
 <body>
 
     <header class="cabecalho">
         <h2>Sistema de Acompanhamento de Demandas</h2>
+        <nav class="menu">
+            <a href="dashboard-demanda.html">Dashboard</a>
+            <a href="Listagem-demandas.html">Demandas</a>
+            <a href="cadastro-demanda.html">Nova Demanda</a>
+            <a href="login.html">Login</a>
+        </nav>
     </header>
 
     <main class="container">
@@ -17,18 +46,17 @@
             <h1 class="titulo">Demandas</h1>
         </div>
 
-        <!-- Painel de Buscas e Filtros -->
         <div class="painel">
             <h2>Buscar e Filtrar</h2>
 
             <div class="campo">
                 <label for="buscaTexto">Buscar (Título ou Descrição):</label>
-                <input type="text" id="buscaTexto" placeholder="Digite o que procura...">
+                <input type="text" id="buscaTexto" maxlength="100" placeholder="Digite o que procura...">
+                <span id="erroBusca" class="mensagem-erro"></span>
             </div>
 
-            <div style="display: flex; gap: 15px; flex-wrap: wrap;">
-
-                <div class="campo" style="flex: 1; min-width: 140px;">
+            <div class="filtros-linha">
+                <div class="campo">
                     <label for="filtroStatus">Status:</label>
                     <select id="filtroStatus">
                         <option value="todos">Todos</option>
@@ -40,7 +68,7 @@
                     </select>
                 </div>
 
-                <div class="campo" style="flex: 1; min-width: 140px;">
+                <div class="campo">
                     <label for="filtroPrioridade">Prioridade:</label>
                     <select id="filtroPrioridade">
                         <option value="todos">Todas</option>
@@ -51,7 +79,7 @@
                     </select>
                 </div>
 
-                <div class="campo" style="flex: 1; min-width: 140px;">
+                <div class="campo">
                     <label for="filtroTipo">Tipo:</label>
                     <select id="filtroTipo">
                         <option value="todos">Todos</option>
@@ -62,25 +90,25 @@
                     </select>
                 </div>
 
-                <div class="campo" style="flex: 1; min-width: 140px;">
+                <div class="campo">
                     <label for="filtroResponsavel">Responsável:</label>
                     <select id="filtroResponsavel">
                         <option value="todos">Todos</option>
                     </select>
                 </div>
 
-                <div class="campo" style="flex: 1; min-width: 140px;">
+                <div class="campo">
                     <label for="filtroProjeto">Projeto:</label>
                     <select id="filtroProjeto">
                         <option value="todos">Todos</option>
                     </select>
                 </div>
 
-                <div class="campo" style="flex: 1; min-width: 140px;">
+                <div class="campo">
                     <label for="ordenacao">Ordenar por:</label>
                     <select id="ordenacao">
-                        <option value="prazo">Prazo (Mais próximo)</option>
-                        <option value="criacao">Data de Criação</option>
+                        <option value="prazo">Prazo (mais próximo)</option>
+                        <option value="criacao">Data de criação</option>
                         <option value="prioridade">Prioridade</option>
                         <option value="status">Status (A-Z)</option>
                     </select>
@@ -88,6 +116,7 @@
             </div>
         </div>
 
+<<<<<<< Updated upstream
         <div id="lista" style="display: block;">
 
             <!-- DEMANDA 1 -->
@@ -119,7 +148,14 @@
                 <p><strong>Status:</strong> Pendente</p>
                 <button onclick="window.location.href='detalhes-demanda.html'" style="margin-top: 15px;">Ver detalhes</button>
             </div>
+=======
+        <!-- Mensagem da API (400, 401, 404 ou falha de conexão), visível na tela. -->
+        <p id="mensagemErro" class="mensagem-erro"></p>
+>>>>>>> Stashed changes
 
+        <!-- Preenchida pelo JavaScript com o retorno de GET /demandas. -->
+        <div id="lista">
+            <p class="aviso-lista">Carregando demandas...</p>
         </div>
     </main>
 
