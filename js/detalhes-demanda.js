@@ -337,9 +337,7 @@ async function carregarHistorico() {
 
         historico.forEach(item => {
 
-            const data =
-                new Date(item.dataHora)
-                    .toLocaleString("pt-BR");
+            const data = item.dataHora;
 
             lista.innerHTML += `
                 <li class="item-pesquisavel">

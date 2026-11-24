@@ -62,7 +62,7 @@ export function rotasDetalhesEComentarios(app: Express) {
                 h.campo AS "campo",
                 h.valor_anterior AS "valorAnterior",
                 h.valor_novo AS "valorNovo",
-                h.data_hora AS "dataHora"
+                TO_CHAR(FROM_TZ(h.data_hora, 'UTC') AT TIME ZONE 'America/Sao_Paulo', 'DD/MM/YYYY HH24:MI') AS "dataHora"
              FROM historico h
              INNER JOIN usuario u
                 ON u.id = h.usuario_id
