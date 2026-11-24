@@ -11,10 +11,6 @@ dotenv.config();
 oracledb.outFormat = oracledb.OUT_FORMAT_OBJECT;
 
 export async function abrirConexao() {
-
-    console.log("DB_USER:", process.env.DB_USER);
-console.log("DB_PASSWORD:", process.env.DB_PASSWORD);
-console.log("DB_CONNECT_STRING:", process.env.DB_CONNECT_STRING);
     return await oracledb.getConnection({
         user: process.env.DB_USER,
         password: process.env.DB_PASSWORD,
