@@ -35,7 +35,7 @@ async function conferirLogin() {
             window.location.href = "login.html";
         }
     } catch (erro) {
-        mostrarErro("Não foi poss?vel verificar o login. Confira se a API está no ar.");
+        mostrarErro("N?o foi poss?vel verificar o login. Confira se a API está no ar.");
     }
 }
 
@@ -54,9 +54,9 @@ function configurarSair() {
                 window.location.href = "login.html";
                 return;
             }
-            mostrarErro(await mensagemDaResposta(resposta, "Não foi poss?vel encerrar a sessão"));
+            mostrarErro(await mensagemDaResposta(resposta, "N?o foi poss?vel encerrar a sessão"));
         } catch (erro) {
-            mostrarErro("Não foi poss?vel encerrar a sessão. Verifique se a API está em execução.");
+            mostrarErro("N?o foi poss?vel encerrar a sessão. Verifique se a API está em execução.");
         }
     });
 }
@@ -147,24 +147,24 @@ async function carregarDemandas() {
         }
 
         if (!resposta.ok) {
-            const mensagem = await mensagemDaResposta(resposta, "Não foi poss?vel consultar as demandas");
+            const mensagem = await mensagemDaResposta(resposta, "N?o foi poss?vel consultar as demandas");
             mostrarErro(mensagem);
-            renderizarLista([], "Não foi poss?vel carregar as demandas.");
+            renderizarLista([], "N?o foi poss?vel carregar as demandas.");
             return;
         }
 
         const demandas = await resposta.json();
         if (!Array.isArray(demandas)) {
             mostrarErro("A API não retornou uma lista de demandas.");
-            renderizarLista([], "Não foi poss?vel carregar as demandas.");
+            renderizarLista([], "N?o foi poss?vel carregar as demandas.");
             return;
         }
 
         limparErroGeral();
         renderizarLista(demandas);
     } catch (erro) {
-        mostrarErro("Não foi poss?vel consultar as demandas. Verifique se a API está em execução.");
-        renderizarLista([], "Não foi poss?vel carregar as demandas.");
+        mostrarErro("N?o foi poss?vel consultar as demandas. Verifique se a API está em execução.");
+        renderizarLista([], "N?o foi poss?vel carregar as demandas.");
     }
 }
 
@@ -264,7 +264,7 @@ async function carregarOpcoesFiltros() {
 
         if (!respostaProjetos.ok || !respostaUsuarios.ok) {
             const falha = !respostaProjetos.ok ? respostaProjetos : respostaUsuarios;
-            const mensagem = await mensagemDaResposta(falha, "Não foi poss?vel carregar os filtros");
+            const mensagem = await mensagemDaResposta(falha, "N?o foi poss?vel carregar os filtros");
             mostrarErro(mensagem);
             return;
         }
@@ -293,6 +293,6 @@ async function carregarOpcoesFiltros() {
             selectResponsavel.appendChild(opcao);
         });
     } catch (erro) {
-        mostrarErro("Não foi poss?vel carregar projetos e responsáveis. Verifique se a API está em execução.");
+        mostrarErro("N?o foi poss?vel carregar projetos e responsáveis. Verifique se a API está em execução.");
     }
 }
