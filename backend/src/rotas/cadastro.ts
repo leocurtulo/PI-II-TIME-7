@@ -25,7 +25,7 @@ function estaVazio(valor: any): boolean {
 
 // Registra as rotas da tela de cadastro no app (chamada no index.ts)
 export function rotasCadastro(app: Express) {
-    // GET /projetos: lista os projetos cadastrados no banco
+    // GET /projetos: Administrador vê todos os projetos; Líder e Membro só os vinculados
     app.get("/projetos", async (req, res) => {
         const usuario = req.session.usuario;
 
@@ -45,7 +45,7 @@ export function rotasCadastro(app: Express) {
                 );
             }else{
                 resultado = await conexao.execute(
-                    `SELECT p.id AS "Id", p.nome AS "nome" 
+                    `SELECT p.id AS "id", p.nome AS "nome" 
                     FROM projeto p
                     INNER JOIN projeto_usuario pu ON pu.projeto_id = p.id
                     WHERE pu.usuario_id = :usuarioId
@@ -63,6 +63,7 @@ export function rotasCadastro(app: Express) {
 
     // GET /usuarios: lista os usuários para o select de responsável.
     // Devolve só id e nome: a senha não pode ser enviada para a tela.
+    // exigirLogin: só quem está logado pode ver a lista de usuários
     app.get("/usuarios",exigirLogin, async (req, res) => {
         try {
             const conexao = await abrirConexao();
@@ -165,7 +166,8 @@ export function rotasCadastro(app: Express) {
                 res.status(400).json({ "mensagem": "Dados inválidos.", erros });
                 return;
             }
-
+            
+            // Líder só cadastra nos projetos em que está vinculado
             if(usuario.perfil === "Líder de Projeto"){
                 const vinculo = await conexao.execute(
                     `SELECT 1 FROM projeto_usuario
