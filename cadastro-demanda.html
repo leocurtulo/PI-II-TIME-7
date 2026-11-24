@@ -9,16 +9,19 @@ Descrição: tela de cadastro de demandas. -->
     <title>Nova demanda - Sistema de acompanhamento de Demandas</title>
     <link rel="stylesheet" href="style.css">
     <script src="js/api.js" defer></script>
+    <script src="js/sessao.js" defer></script>
     <script src="js/cadastro-demanda.js" defer></script>
 </head>
 <body>
 
     <header class="cabecalho">
-        <h2>Sistema de Demandas</h2>
+        <h2>Sistema de Acompanhamento de Demandas</h2>
         <nav class="menu">
             <a href="dashboard-demanda.html">Dashboard</a>
             <a href="Listagem-demandas.html">Demandas</a>
-            <a href="cadastro-demanda.html">Nova demanda</a>
+            <a href="cadastro-demanda.html">Nova Demanda</a>
+            <span id="usuarioLogado"></span>
+            <button id="botaoSair" type="button">Sair</button>
         </nav>
     </header>
     
