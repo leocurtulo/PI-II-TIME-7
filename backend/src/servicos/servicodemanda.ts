@@ -23,6 +23,11 @@ export interface FiltrosDemanda {
     ordenarPor?: string;
 }
 
+export interface UsuarioLogado {
+    id: number;
+    perfil: string;
+}
+
 function texto(valor: string | null | undefined): string {
     return (valor ?? "").toLocaleLowerCase("pt-BR");
 }
@@ -35,8 +40,8 @@ function chavePrazo(valor: string | null | undefined): string {
     return valor;
 }
 
-export async function listarDemandas(filtros: FiltrosDemanda): Promise<Demanda[]> {
-    let demandas = await buscarTodasDemandas();
+export async function listarDemandas(filtros: FiltrosDemanda, usuario?: UsuarioLogado): Promise<Demanda[]> {
+    let demandas = await buscarTodasDemandas(usuario);
 
     if (filtros.status) {
         demandas = demandas.filter((demanda) => demanda.status === filtros.status);
