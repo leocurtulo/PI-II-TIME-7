@@ -130,9 +130,19 @@ export function rotasEdicao(app: Express) {
         try {
             conexao = await abrirConexao();
 
+            // Busca a demanda como está hoje no banco: projeto, status e os valores antigos (para o histórico)
             const atual = await conexao.execute(
-                `SELECT projeto_id AS "projetoId", status AS "status"
-                FROM demanda WHERE id = :id`,
+                `SELECT d.projeto_id AS "projetoId",
+                d.status AS "status",
+                d.titulo AS "titulo",
+                d.descricao AS "descricao",
+                d.tipo AS "tipo",
+                d.prioridade AS "prioridade",
+                u.nome AS "responsavel",
+                TO_CHAR(d.prazo, 'YYYY-MM-DD') AS "prazo"
+                FROM demanda d
+                LEFT JOIN usuario u ON d.responsavel_id = u.id
+                WHERE d.id = :id`,
                 {id: id}
             );
 
@@ -163,6 +173,23 @@ export function rotasEdicao(app: Express) {
                 }
             }
 
+            let responsavelNovo: string | null = null;
+
+            if(responsavelId !== null){
+                const resp = await conexao.execute(
+                    `SELECT nome AS "nome" FROM usuario WHERE id = :id`,
+                    {id: responsavelId}
+                );
+
+                const linhasResp: any[] = resp.rows || [];
+
+                if (linhasResp.length === 0){
+                    res.status(400).json({mensagem: "Responsável não encontrado."});
+                    return;
+                }
+                responsavelNovo = linhasResp[0].nome;
+            }
+
             const resultado = await conexao.execute(
                 `UPDATE demanda
                  SET titulo = :titulo,
@@ -189,6 +216,35 @@ export function rotasEdicao(app: Express) {
             if (resultado.rowsAffected === 0) {
                 res.status(404).json({ mensagem: "Demanda não encontrada." });
                 return;
+            }
+
+            // Lista com cada campo: o valor que estava no banco e o valor novo que veio da tela
+            const alteracoes = [
+                {campo: "titulo", anterior: demandaAtual.titulo, novo: String(dados.titulo).trim()},
+                {campo: "descricao", anterior: demandaAtual.descricao, novo: String(dados.descricao).trim()},
+                {campo: "tipo", anterior: demandaAtual.tipo, novo: dados.tipo},
+                {campo: "prioridade", anterior: demandaAtual.prioridade, novo: dados.prioridade},
+                {campo: "responsavel", anterior: demandaAtual.responsavel, novo: responsavelNovo},
+                {campo: "prazo", anterior: demandaAtual.prazo, novo: prazo}
+                
+            ];
+
+            // Grava uma linha no histórico para cada campo que mudou
+            for(const alteracao of alteracoes){
+                // ?? "" transforma null em texto vazio, para null e vazio contarem como iguais
+                if ((alteracao.anterior ?? "") !== (alteracao.novo ?? "")){
+                    await conexao.execute(
+                        `INSERT INTO historico (demanda_id, usuario_id, campo, valor_anterior, valor_novo)
+                        VALUES(:demandaId, :usuarioId, :campo, :anterior, :novo)`,
+                        {demandaId: id,
+                            usuarioId: usuario.id,
+                            campo: alteracao.campo,
+                            anterior: alteracao.anterior,
+                            novo: alteracao.novo
+                        },
+                        {autoCommit: true}
+                    );
+                }
             }
 
             res.status(200).json({ mensagem: "Demanda atualizada com sucesso." });
