@@ -62,21 +62,4 @@ export function rotasLogin(app: Express) {
 
 }
     });
-    app.get("/sessao", (req, res) => {
-
-        if (!req.session.usuario) {
-
-            res.status(401).json({
-                mensagem: "Nenhum usuário logado."
-            });
-
-            return;
-        }
-
-        res.status(200).json(
-            req.session.usuario
-        );
-
-    });
-
 }
