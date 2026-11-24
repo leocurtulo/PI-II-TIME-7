@@ -14,6 +14,8 @@ import { abrirConexao } from "../banco/conexao";
 // Importa as listas de validação (tipos e prioridades aceitos)
 import { TIPOS, PRIORIDADES } from "../data/dados";
 
+// Importa o middleware que só deixa passar quem está logado
+import { exigirLogin } from "./autenticacao";
 
 
 // Verifica se um valor está vazio (não veio, veio null ou é texto em branco)
@@ -25,13 +27,32 @@ function estaVazio(valor: any): boolean {
 export function rotasCadastro(app: Express) {
     // GET /projetos: lista os projetos cadastrados no banco
     app.get("/projetos", async (req, res) => {
+        const usuario = req.session.usuario;
+
+        if(!usuario){
+            res.status(401).json({mensagem: "Faça login para continuar."});
+            return;
+        }
+
         try {
             const conexao = await abrirConexao();
 
-            // AS "id" e AS "nome" deixam os nomes em minúsculo (o Oracle devolve em MAIÚSCULO)
-            const resultado = await conexao.execute(
-                `SELECT id AS "id", nome AS "nome" FROM projeto ORDER BY id`
-            );
+            let resultado;
+
+            if(usuario.perfil === "Administrador"){
+                resultado = await conexao.execute(
+                    `SELECT id AS "id", nome AS "nome" FROM projeto ORDER BY id`
+                );
+            }else{
+                resultado = await conexao.execute(
+                    `SELECT p.id AS "Id", p.nome AS "nome" 
+                    FROM projeto p
+                    INNER JOIN projeto_usuario pu ON pu.projeto_id = p.id
+                    WHERE pu.usuario_id = :usuarioId
+                    ORDER BY p.id`,
+                    {usuarioId: usuario.id}
+                );
+            }
 
             await conexao.close();
             res.status(200).json(resultado.rows);
@@ -42,7 +63,7 @@ export function rotasCadastro(app: Express) {
 
     // GET /usuarios: lista os usuários para o select de responsável.
     // Devolve só id e nome: a senha não pode ser enviada para a tela.
-    app.get("/usuarios", async (req, res) => {
+    app.get("/usuarios",exigirLogin, async (req, res) => {
         try {
             const conexao = await abrirConexao();
 
