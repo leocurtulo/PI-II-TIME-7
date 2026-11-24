@@ -1,5 +1,5 @@
 // AUTOR: Leonardo Furlan Curtulo
-// DESCRIÇÃO: Rotas da edição de demanda: busca uma demanda pelo id (GET /demandas/:id) e, nas próximas etapas, a edição (PUT /demandas/:id), usando o banco Oracle
+// DESCRIÇÃO: Rotas da edição de demanda: busca uma demanda pelo id (GET /demandas/:id) e a edição (PUT /demandas/:id), usando o banco Oracle
 
 
 // Importa as listas de validação (tipos e prioridades aceitos)
@@ -185,7 +185,8 @@ export function rotasEdicao(app: Express) {
                 res.status(400).json({mensagem: "Demanda concluída ou cancelada não pode ser editada."});
                 return;
             }
-
+    
+            // Líder só edita demandas dos projetos em que está vinculado
             if(usuario.perfil === "Líder de Projeto"){
                 const vinculo = await conexao.execute(
                     `SELECT 1 FROM projeto_usuario

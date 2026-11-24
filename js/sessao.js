@@ -1,5 +1,5 @@
 // AUTOR: Leonardo Furlan Curtulo
-// DESCRIÇÃO: Confere se tem alguém logado (GET /sessao), mostra o nome e o perfil no menu e faz o logout (POST /logout). Usado pelas telas de cadastro e de edição
+// DESCRIÇÃO: Confere se tem alguém logado (GET /sessao), mostra o nome e o perfil no menu e faz o logout (POST /logout). Usado por todas as telas, menos a de login
 
 // Pergunta ao servidor quem está logado
 async function carregarSessao() {
