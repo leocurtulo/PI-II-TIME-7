@@ -73,11 +73,26 @@ export function rotasEdicao(app: Express) {
 
         const erros: string[] = [];
 
+        
+
 
         if (isNaN(id)) {
             res.status(400).json({ mensagem: "Id inválido." });
             return;
         }
+
+        const usuario = req.session.usuario;
+
+        if(!usuario){
+            res.status(401).json({mensagem: "Faça login para continuar."});
+            return;
+        }
+
+        if(usuario.perfil === "Membro da Equipe"){
+            res.status(403).json({mensagem: "Membro da Equipe não pode editar demanda."});
+            return;
+        }
+
 
         if (dados.titulo === undefined || String(dados.titulo).trim() === "") {
             erros.push("O título é obrigatório.");
@@ -114,6 +129,39 @@ export function rotasEdicao(app: Express) {
         let conexao;
         try {
             conexao = await abrirConexao();
+
+            const atual = await conexao.execute(
+                `SELECT projeto_id AS "projetoId", status AS "status"
+                FROM demanda WHERE id = :id`,
+                {id: id}
+            );
+
+            const linhasAtual: any[] = atual.rows || [];
+
+            if(linhasAtual.length === 0){
+                res.status(404).json({mensagem: "Demanda não encontrada."});
+                return;
+            }
+
+            const demandaAtual = linhasAtual[0];
+
+            if(demandaAtual.status === "Concluída" || demandaAtual.status === "Cancelada"){
+                res.status(400).json({mensagem: "Demanda concluída ou cancelada não pode ser editada."});
+                return;
+            }
+
+            if(usuario.perfil === "Líder de Projeto"){
+                const vinculo = await conexao.execute(
+                    `SELECT 1 FROM projeto_usuario
+                    WHERE projeto_id = :projetoId AND usuario_id = :usuarioId`,
+                    {projetoId: demandaAtual.projetoId, usuarioId: usuario.id}
+                );
+
+                if(!vinculo.rows || vinculo.rows.length === 0){
+                    res.status(403).json({ mensagem: "Você não está vinculado ao projeto desta demanda." });
+                    return;
+                }
+            }
 
             const resultado = await conexao.execute(
                 `UPDATE demanda
