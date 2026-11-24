@@ -1,15 +1,15 @@
 /*
-AUTOR: Caio Ferreira AragÃ£o
-DESCRIÃ‡ÃƒO: Busca, filtros e ordenaÃ§Ã£o da listagem de demandas.
+AUTOR: Caio Ferreira Arag?o
+DESCRI??O: Busca, filtros e ordena??o da listagem de demandas.
 A tela consulta GET /demandas e monta os cards com os dados da API.
 */
 
 const API_BASE_URL = "http://localhost:3000";
 const TAMANHO_MAXIMO_BUSCA = 100;
 
-const STATUS_VALIDOS = ["Aberta", "Em andamento", "Em revisÃ£o", "ConcluÃ­da", "Cancelada"];
-const PRIORIDADES_VALIDAS = ["CrÃ­tica", "Alta", "MÃ©dia", "Baixa"];
-const TIPOS_VALIDOS = ["Tarefa", "Defeito", "Melhoria", "DocumentaÃ§Ã£o"];
+const STATUS_VALIDOS = ["Aberta", "Em andamento", "Em revisão", "Conclu?da", "Cancelada"];
+const PRIORIDADES_VALIDAS = ["Cr?tica", "Alta", "Média", "Baixa"];
+const TIPOS_VALIDOS = ["Tarefa", "Defeito", "Melhoria", "Documenta??o"];
 const ORDENACOES_VALIDAS = ["prazo", "criacao", "prioridade", "status"];
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("ordenacao").addEventListener("change", carregarDemandas);
 });
 
-// Quem nÃ£o estÃ¡ logado volta para o login, no mesmo padrÃ£o das outras telas.
+// Quem não está logado volta para o login, no mesmo padrão das outras telas.
 async function conferirLogin() {
     try {
         const resposta = await fetch(API_BASE_URL + "/sessao", { credentials: "include" });
@@ -35,7 +35,7 @@ async function conferirLogin() {
             window.location.href = "login.html";
         }
     } catch (erro) {
-        mostrarErro("NÃ£o foi possÃ­vel verificar o login. Confira se a API estÃ¡ no ar.");
+        mostrarErro("Não foi poss?vel verificar o login. Confira se a API está no ar.");
     }
 }
 
@@ -54,14 +54,14 @@ function configurarSair() {
                 window.location.href = "login.html";
                 return;
             }
-            mostrarErro(await mensagemDaResposta(resposta, "NÃ£o foi possÃ­vel encerrar a sessÃ£o"));
+            mostrarErro(await mensagemDaResposta(resposta, "Não foi poss?vel encerrar a sessão"));
         } catch (erro) {
-            mostrarErro("NÃ£o foi possÃ­vel encerrar a sessÃ£o. Verifique se a API estÃ¡ em execuÃ§Ã£o.");
+            mostrarErro("Não foi poss?vel encerrar a sessão. Verifique se a API está em execução.");
         }
     });
 }
 
-// LÃª a mensagem JSON da API. Se o corpo nÃ£o for JSON, usa o status HTTP.
+// Lê a mensagem JSON da API. Se o corpo não for JSON, usa o status HTTP.
 async function mensagemDaResposta(resposta, reserva) {
     try {
         const corpo = await resposta.json();
@@ -69,7 +69,7 @@ async function mensagemDaResposta(resposta, reserva) {
             return corpo.mensagem;
         }
     } catch (erro) {
-        // Corpo vazio ou que nÃ£o Ã© JSON.
+        // Corpo vazio ou que não é JSON.
     }
     return reserva + " (HTTP " + resposta.status + ").";
 }
@@ -82,14 +82,14 @@ function limparErroGeral() {
     document.getElementById("mensagemErro").textContent = "";
 }
 
-// A busca nÃ£o Ã© obrigatÃ³ria. Quando preenchida, precisa ter no mÃ¡ximo 100 caracteres.
+// A busca não é obrigatória. Quando preenchida, precisa ter no máximo 100 caracteres.
 function validarBusca() {
     const campo = document.getElementById("buscaTexto");
     const erro = document.getElementById("erroBusca");
     const texto = campo.value.trim();
 
     if (texto.length > TAMANHO_MAXIMO_BUSCA) {
-        erro.textContent = "A busca pode ter no mÃ¡ximo " + TAMANHO_MAXIMO_BUSCA + " caracteres.";
+        erro.textContent = "A busca pode ter no máximo " + TAMANHO_MAXIMO_BUSCA + " caracteres.";
         campo.classList.add("campo-invalido");
         return null;
     }
@@ -120,47 +120,51 @@ async function carregarDemandas() {
     const status = valorFiltro("filtroStatus", STATUS_VALIDOS);
     const prioridade = valorFiltro("filtroPrioridade", PRIORIDADES_VALIDAS);
     const tipo = valorFiltro("filtroTipo", TIPOS_VALIDOS);
-    const ordenarPor = document.getElementById("ordenacao").value;
+    const ordenacao = valorFiltro("ordenacao", ORDENACOES_VALIDAS);
+    const responsavel = document.getElementById("filtroResponsavel").value;
+    const projeto = document.getElementById("filtroProjeto").value;
 
-    if (status === null || prioridade === null || tipo === null || ORDENACOES_VALIDAS.indexOf(ordenarPor) === -1) {
-        mostrarErro("HÃ¡ um filtro ou uma ordenaÃ§Ã£o com valor que o sistema nÃ£o aceita.");
+    if (status === null || prioridade === null || tipo === null || ordenacao === null) {
+        mostrarErro("Um dos filtros está com valor inválido. Recarregue a página e tente de novo.");
         return;
     }
 
     const params = new URLSearchParams();
-    if (busca) params.append("busca", busca);
-    if (status) params.append("status", status);
-    if (prioridade) params.append("prioridade", prioridade);
-    if (tipo) params.append("tipo", tipo);
-
-    const responsavel = document.getElementById("filtroResponsavel").value;
-    const projeto = document.getElementById("filtroProjeto").value;
-    if (responsavel !== "todos") params.append("responsavel", responsavel);
-    if (projeto !== "todos") params.append("projeto", projeto);
-    params.append("ordenarPor", ordenarPor);
+    if (busca) params.set("busca", busca);
+    if (status) params.set("status", status);
+    if (prioridade) params.set("prioridade", prioridade);
+    if (tipo) params.set("tipo", tipo);
+    if (responsavel && responsavel !== "todos") params.set("responsavel", responsavel);
+    if (projeto && projeto !== "todos") params.set("projeto", projeto);
+    if (ordenacao) params.set("ordenarPor", ordenacao);
 
     try {
         const resposta = await fetch(API_BASE_URL + "/demandas?" + params.toString(), { credentials: "include" });
 
+        if (resposta.status === 401) {
+            window.location.href = "login.html";
+            return;
+        }
+
         if (!resposta.ok) {
-            const mensagem = await mensagemDaResposta(resposta, "NÃ£o foi possÃ­vel listar as demandas");
+            const mensagem = await mensagemDaResposta(resposta, "Não foi poss?vel consultar as demandas");
             mostrarErro(mensagem);
-            renderizarLista([], "A lista nÃ£o foi atualizada por causa do erro acima.");
+            renderizarLista([], "Não foi poss?vel carregar as demandas.");
             return;
         }
 
         const demandas = await resposta.json();
         if (!Array.isArray(demandas)) {
-            mostrarErro("A API nÃ£o retornou a lista de demandas.");
-            renderizarLista([], "A lista nÃ£o foi atualizada por causa do erro acima.");
+            mostrarErro("A API não retornou uma lista de demandas.");
+            renderizarLista([], "Não foi poss?vel carregar as demandas.");
             return;
         }
 
         limparErroGeral();
         renderizarLista(demandas);
     } catch (erro) {
-        mostrarErro("NÃ£o foi possÃ­vel consultar as demandas. Verifique se a API estÃ¡ em execuÃ§Ã£o.");
-        renderizarLista([], "A lista nÃ£o foi atualizada por causa do erro acima.");
+        mostrarErro("Não foi poss?vel consultar as demandas. Verifique se a API está em execução.");
+        renderizarLista([], "Não foi poss?vel carregar as demandas.");
     }
 }
 
@@ -171,9 +175,8 @@ function textoOu(valor, reserva) {
     return String(valor);
 }
 
-// Converte AAAA-MM-DD para o formato usado na tela.
 function formatarData(valor, reserva) {
-    if (valor === null || valor === undefined || String(valor).trim() === "") {
+    if (!valor) {
         return reserva;
     }
     const partes = String(valor).slice(0, 10).split("-");
@@ -209,11 +212,11 @@ function renderizarLista(demandas, avisoVazio) {
         cartao.className = "exemplo";
 
         const titulo = document.createElement("h3");
-        titulo.textContent = textoOu(demanda.titulo, "Sem tÃ­tulo");
+        titulo.textContent = textoOu(demanda.titulo, "Sem título");
 
         const descricao = document.createElement("p");
         descricao.className = "descricao";
-        descricao.textContent = textoOu(demanda.descricao, "Sem descriÃ§Ã£o");
+        descricao.textContent = textoOu(demanda.descricao, "Sem descrição");
 
         const separador = document.createElement("hr");
         separador.style.border = "0";
@@ -226,9 +229,9 @@ function renderizarLista(demandas, avisoVazio) {
         const forteTipo = document.createElement("strong");
         forteTipo.textContent = "Tipo:";
         projetoTipo.appendChild(forteProjeto);
-        projetoTipo.appendChild(document.createTextNode(" " + textoOu(demanda.projeto, "NÃ£o informado") + " | "));
+        projetoTipo.appendChild(document.createTextNode(" " + textoOu(demanda.projeto, "Não informado") + " | "));
         projetoTipo.appendChild(forteTipo);
-        projetoTipo.appendChild(document.createTextNode(" " + textoOu(demanda.tipo, "NÃ£o informado")));
+        projetoTipo.appendChild(document.createTextNode(" " + textoOu(demanda.tipo, "Não informado")));
 
         const botao = document.createElement("button");
         botao.type = "button";
@@ -242,18 +245,18 @@ function renderizarLista(demandas, avisoVazio) {
         cartao.appendChild(descricao);
         cartao.appendChild(separador);
         cartao.appendChild(projetoTipo);
-        cartao.appendChild(criarLinha("ResponsÃ¡vel:", textoOu(demanda.responsavel, "NÃ£o atribuÃ­do")));
-        cartao.appendChild(criarLinha("Data de criaÃ§Ã£o:", formatarData(demanda.dataCriacao, "NÃ£o informada")));
+        cartao.appendChild(criarLinha("Responsável:", textoOu(demanda.responsavel, "Não atribuído")));
+        cartao.appendChild(criarLinha("Data de criação:", formatarData(demanda.dataCriacao, "Não informada")));
         cartao.appendChild(criarLinha("Prazo:", formatarData(demanda.prazoFinalizacao, "Sem prazo")));
-        cartao.appendChild(criarLinha("Prioridade:", textoOu(demanda.prioridade, "NÃ£o informada")));
-        cartao.appendChild(criarLinha("Status:", textoOu(demanda.status, "NÃ£o informado")));
+        cartao.appendChild(criarLinha("Prioridade:", textoOu(demanda.prioridade, "Não informada")));
+        cartao.appendChild(criarLinha("Status:", textoOu(demanda.status, "Não informado")));
         cartao.appendChild(botao);
 
         listaContainer.appendChild(cartao);
     });
 }
 
-// Preenche responsÃ¡vel e projeto com o que jÃ¡ estÃ¡ cadastrado no banco.
+// Preenche respons?vel e projeto com o que já está cadastrado no banco.
 async function carregarOpcoesFiltros() {
     try {
         const respostaProjetos = await fetch(API_BASE_URL + "/projetos", { credentials: "include" });
@@ -261,7 +264,7 @@ async function carregarOpcoesFiltros() {
 
         if (!respostaProjetos.ok || !respostaUsuarios.ok) {
             const falha = !respostaProjetos.ok ? respostaProjetos : respostaUsuarios;
-            const mensagem = await mensagemDaResposta(falha, "NÃ£o foi possÃ­vel carregar os filtros");
+            const mensagem = await mensagemDaResposta(falha, "Não foi poss?vel carregar os filtros");
             mostrarErro(mensagem);
             return;
         }
@@ -270,7 +273,7 @@ async function carregarOpcoesFiltros() {
         const usuarios = await respostaUsuarios.json();
 
         if (!Array.isArray(projetos) || !Array.isArray(usuarios)) {
-            mostrarErro("A API nÃ£o retornou projetos e responsÃ¡veis para os filtros.");
+            mostrarErro("A API não retornou projetos e responsáveis para os filtros.");
             return;
         }
 
@@ -290,6 +293,6 @@ async function carregarOpcoesFiltros() {
             selectResponsavel.appendChild(opcao);
         });
     } catch (erro) {
-        mostrarErro("NÃ£o foi possÃ­vel carregar projetos e responsÃ¡veis. Verifique se a API estÃ¡ em execuÃ§Ã£o.");
+        mostrarErro("Não foi poss?vel carregar projetos e responsáveis. Verifique se a API está em execução.");
     }
 }
