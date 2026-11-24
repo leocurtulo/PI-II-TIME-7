@@ -27,6 +27,14 @@ export function rotasEdicao(app: Express) {
             return;
         }
 
+        const usuario = req.session.usuario;
+
+        if(!usuario){
+            res.status(401).json({mensagem: "Faça login para continuar."});
+            return;
+        }
+
+
         try {
             const conexao = await abrirConexao();
 
@@ -47,19 +55,37 @@ export function rotasEdicao(app: Express) {
                 [id]
             );
 
+            const linhas: any[] =  resultado.rows || [];
 
-            await conexao.close();
-
-            const linhas = resultado.rows || [];
 
             // Nenhuma linha: não existe demanda com esse id
             if (linhas.length === 0) {
+                await conexao.close();
                 res.status(404).json({ mensagem: "Demanda não encontrada." });
                 return;
             }
 
-            // Achou: devolve a demanda (é sempre uma só, por isso linhas[0])
-            res.status(200).json(linhas[0]);
+            const demanda = linhas[0];
+
+            // Administrador vê todas. Líder e Membro só veem demandas dos projetos em que estão vinculados
+            if(usuario.perfil !== "Administrador" && demanda.responsavelId !== usuario.id){
+                const vinculo = await conexao.execute(
+                    `SELECT 1 FROM projeto_usuario
+                    WHERE projeto_id = :projetoId AND usuario_id = :usuarioId`,
+                    {projetoId: demanda.projetoId, usuarioId: usuario.id}
+                );
+
+                if(!vinculo.rows || vinculo.rows.length === 0){
+                    await conexao.close();
+                    res.status(403).json({mensagem: "Você não tem acesso a essa demanda."});
+                    return;
+                }
+            }
+
+
+            await conexao.close();
+            // Achou: devolve a demanda 
+            res.status(200).json(demanda);
         } catch (erro) {
             res.status(500).json({ mensagem: "Erro ao buscar a demanda." });
         }
