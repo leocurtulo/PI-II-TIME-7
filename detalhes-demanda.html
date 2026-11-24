@@ -153,14 +153,32 @@
 
         <section class="formulario">
 
+            <h2>Alterar Status</h2>
+
+            <div class="campo">
+                <label for="novoStatus">Novo status:</label>
+                <select id="novoStatus">
+                    <option value="">Selecione</option>
+                    <option value="Aberta">Aberta</option>
+                    <option value="Em andamento">Em andamento</option>
+                    <option value="Em revisão">Em revisão</option>
+                    <option value="Concluída">Concluída</option>
+                </select>
+            </div>
+
+            <button id="btnAlterarstatus" type="button">
+                Salvar status
+            </button>
+
+        </section>
+
+        <section class="formulario">
+
             <button id="btnEditar">
                 Editar
             </button>
-            <button id="btnAlterarstatus">
-                Alterar Status
-            </button>
             <button id="btnCancelar">
-                Cancelar
+                Cancelar demanda
             </button>
             <a href="Listagem-demandas.html">
                 <button>
