@@ -61,6 +61,18 @@ export function rotasCadastro(app: Express) {
 
     // POST /demandas: cadastra uma nova demanda no banco
     app.post("/demandas", async (req, res) => {
+        const usuario = req.session.usuario;
+
+        if(!usuario){
+            res.status(401).json({mensagem: "Faça login para continuar."});
+            return;
+        }
+
+        if(usuario.perfil === "Membro da Equipe"){
+            res.status(403).json({mensagem: "Membro da Equipe não pode cadastrar demandas."});
+            return;
+        }
+
         // Dados enviados no corpo da requisição (ou objeto vazio, se não vier nada)
         const dados = req.body || {};
 
@@ -131,6 +143,20 @@ export function rotasCadastro(app: Express) {
                 await conexao.close();
                 res.status(400).json({ "mensagem": "Dados inválidos.", erros });
                 return;
+            }
+
+            if(usuario.perfil === "Líder de Projeto"){
+                const vinculo = await conexao.execute(
+                    `SELECT 1 FROM projeto_usuario
+                    WHERE projeto_id = :projetoId AND usuario_id = :usuarioId`,
+                    {projetoId: Number(dados.projetoId), usuarioId: usuario.id}
+                );
+
+                if(!vinculo.rows || vinculo.rows.length === 0){
+                    await conexao.close();
+                    res.status(403).json({mensagem: "Você não está vinculado a esse projeto."});
+                    return;
+                }
             }
 
             // Responsável e prazo são opcionais: se não vierem, ficam null
