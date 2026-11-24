@@ -51,16 +51,10 @@ btnAlterarstatus.addEventListener(
     "click",
     async () => {
 
-        const novoStatus = prompt(
-            "Digite o novo status:\n\n" +
-            "Aberta\n" +
-            "Em andamento\n" +
-            "Em revisão\n" +
-            "Concluída\n" +
-            "Cancelada"
-        );
+        const novoStatus = document.getElementById("novoStatus").value;
 
-        if (!novoStatus) {
+        if(novoStatus === ""){
+            alert("Selecione um status.");
             return;
         }
 
