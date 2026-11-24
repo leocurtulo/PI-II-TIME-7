@@ -5,6 +5,7 @@ DESCRIÇÃO: Registra as rotas GET para listagem, filtros, busca e ordenação d
 */
 
 import { Express, Request, Response } from "express";
+import { exigirLogin } from "./autenticacao";
 import { listarDemandas } from "../servicos/servicodemanda";
 
 export function rotasListagem(app: Express) {
@@ -20,7 +21,8 @@ export function rotasListagem(app: Express) {
                 ordenarPor: req.query.ordenarPor as string
             };
 
-            const demandas = await listarDemandas(filtros);
+            const usuario = req.session.usuario!;
+            const demandas = await listarDemandas(filtros, usuario);
 
             res.status(200).json(demandas);
         } catch (erro) {
@@ -32,6 +34,6 @@ export function rotasListagem(app: Express) {
         }
     };
 
-    app.get("/demandas", handler);
-    app.get("/api/demandas", handler);
+    app.get("/demandas", exigirLogin, handler);
+    app.get("/api/demandas", exigirLogin, handler);
 }

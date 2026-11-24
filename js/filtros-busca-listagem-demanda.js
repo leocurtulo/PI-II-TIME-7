@@ -1,127 +1,3 @@
-<<<<<<< Updated upstream
-console.log('[script.js] arquivo carregado');
-
-(function () {
-    'use strict';
-
-    function iniciar() {
-        var inputBusca = document.getElementById('buscaTexto');
-        var selectStatus = document.getElementById('filtroStatus');
-        var selectPrioridade = document.getElementById('filtroPrioridade');
-        var selectTipo = document.getElementById('filtroTipo');
-        var selectResponsavel = document.getElementById('filtroResponsavel');
-        var selectProjeto = document.getElementById('filtroProjeto');
-        var selectOrdenacao = document.getElementById('ordenacao');
-        var btnAplicar = document.getElementById('btnAplicarFiltros');
-        var lista = document.getElementById('lista');
-
-        if (!lista) {
-            console.error('[script.js] Elemento #lista não encontrado. Confira o ID no HTML.');
-            return;
-        }
-
-        var demandas = Array.prototype.slice.call(document.querySelectorAll('.exemplo'));
-        console.log('[script.js] demandas encontradas:', demandas.length);
-
-        var msgVazio = document.createElement('p');
-        msgVazio.textContent = 'Nenhuma demanda encontrada com esses filtros.';
-        msgVazio.style.display = 'none';
-        msgVazio.style.color = '#555555';
-        msgVazio.style.textAlign = 'center';
-        lista.appendChild(msgVazio);
-
-        function normalizar(texto) {
-            return String(texto || '')
-                .normalize('NFD')
-                .replace(/[\u0300-\u036f]/g, '')
-                .toLowerCase()
-                .trim();
-        }
-
-        function valor(select) {
-            return select ? normalizar(select.value) : 'todos';
-        }
-
-        function aplicarFiltros() {
-            var termo = normalizar(inputBusca ? inputBusca.value : '');
-            var fStatus = valor(selectStatus);
-            var fPrioridade = valor(selectPrioridade);
-            var fTipo = valor(selectTipo);
-            var fResponsavel = valor(selectResponsavel);
-            var fProjeto = valor(selectProjeto);
-            var ordem = selectOrdenacao ? selectOrdenacao.value : 'prazo';
-
-            var filtradas = demandas.filter(function (d) {
-                var h3 = d.querySelector('h3');
-                var desc = d.querySelector('.descricao');
-                var titulo = normalizar(h3 ? h3.textContent : '');
-                var descricao = normalizar(desc ? desc.textContent : '');
-
-                var okBusca = termo === '' || titulo.indexOf(termo) !== -1 || descricao.indexOf(termo) !== -1;
-                var okStatus = fStatus === 'todos' || normalizar(d.dataset.status) === fStatus;
-                var okPrioridade = fPrioridade === 'todos' || normalizar(d.dataset.prioridade) === fPrioridade;
-                var okTipo = fTipo === 'todos' || normalizar(d.dataset.tipo) === fTipo;
-                var okResp = fResponsavel === 'todos' || normalizar(d.dataset.responsavel) === fResponsavel;
-                var okProjeto = fProjeto === 'todos' || normalizar(d.dataset.projeto) === fProjeto;
-
-                return okBusca && okStatus && okPrioridade && okTipo && okResp && okProjeto;
-            });
-
-
-            filtradas.sort(function (a, b) {
-                if (ordem === 'prazo') {
-                    return new Date(a.dataset.prazo || 0) - new Date(b.dataset.prazo || 0);
-                }
-                if (ordem === 'criacao') {
-                    return new Date(b.dataset.criacao || 0) - new Date(a.dataset.criacao || 0);
-                }
-                if (ordem === 'prioridade') {
-                    return parseInt(a.dataset.nivelPrioridade || 0, 10) - parseInt(b.dataset.nivelPrioridade || 0, 10);
-                }
-                if (ordem === 'status') {
-                    return (a.dataset.status || '').localeCompare(b.dataset.status || '');
-                }
-                return 0;
-            });
-
-            demandas.forEach(function (d) {
-                d.style.setProperty('display', 'none', 'important');
-            });
-
-            filtradas.forEach(function (d) {
-                d.style.setProperty('display', 'block', 'important');
-                lista.insertBefore(d, msgVazio);
-            });
-
-            msgVazio.style.display = filtradas.length === 0 ? 'block' : 'none';
-
-            console.log('[script.js] filtros aplicados. Resultados:', filtradas.length);
-        }
-
-        if (btnAplicar) {
-            btnAplicar.addEventListener('click', function (e) {
-                e.preventDefault();
-                aplicarFiltros();
-            });
-        }
-
-        // Aplica também ao digitar / trocar um filtro
-        if (inputBusca) inputBusca.addEventListener('input', aplicarFiltros);
-        [selectStatus, selectPrioridade, selectTipo, selectResponsavel, selectProjeto, selectOrdenacao]
-            .forEach(function (s) {
-                if (s) s.addEventListener('change', aplicarFiltros);
-            });
-
-        aplicarFiltros();
-    }
-
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', iniciar);
-    } else {
-        iniciar();
-    }
-})();
-=======
 /*
 AUTOR: Caio Ferreira Aragão
 DESCRIÇÃO: Busca, filtros e ordenação da listagem de demandas.
@@ -138,6 +14,7 @@ const ORDENACOES_VALIDAS = ["prazo", "criacao", "prioridade", "status"];
 
 document.addEventListener("DOMContentLoaded", () => {
     conferirLogin();
+    configurarSair();
     carregarOpcoesFiltros();
     carregarDemandas();
 
@@ -153,13 +30,35 @@ document.addEventListener("DOMContentLoaded", () => {
 // Quem não está logado volta para o login, no mesmo padrão das outras telas.
 async function conferirLogin() {
     try {
-        const resposta = await fetch(API_BASE_URL + "/sessao");
+        const resposta = await fetch(API_BASE_URL + "/sessao", { credentials: "include" });
         if (resposta.status === 401) {
             window.location.href = "login.html";
         }
     } catch (erro) {
         mostrarErro("Não foi possível verificar o login. Confira se a API está no ar.");
     }
+}
+
+function configurarSair() {
+    const linkSair = document.getElementById("linkSair");
+    if (!linkSair) return;
+
+    linkSair.addEventListener("click", async (event) => {
+        event.preventDefault();
+        try {
+            const resposta = await fetch(API_BASE_URL + "/logout", {
+                method: "POST",
+                credentials: "include"
+            });
+            if (resposta.ok || resposta.status === 401) {
+                window.location.href = "login.html";
+                return;
+            }
+            mostrarErro(await mensagemDaResposta(resposta, "Não foi possível encerrar a sessão"));
+        } catch (erro) {
+            mostrarErro("Não foi possível encerrar a sessão. Verifique se a API está em execução.");
+        }
+    });
 }
 
 // Lê a mensagem JSON da API. Se o corpo não for JSON, usa o status HTTP.
@@ -221,39 +120,43 @@ async function carregarDemandas() {
     const status = valorFiltro("filtroStatus", STATUS_VALIDOS);
     const prioridade = valorFiltro("filtroPrioridade", PRIORIDADES_VALIDAS);
     const tipo = valorFiltro("filtroTipo", TIPOS_VALIDOS);
-    const ordenarPor = document.getElementById("ordenacao").value;
+    const ordenacao = valorFiltro("ordenacao", ORDENACOES_VALIDAS);
+    const responsavel = document.getElementById("filtroResponsavel").value;
+    const projeto = document.getElementById("filtroProjeto").value;
 
-    if (status === null || prioridade === null || tipo === null || ORDENACOES_VALIDAS.indexOf(ordenarPor) === -1) {
-        mostrarErro("Há um filtro ou uma ordenação com valor que o sistema não aceita.");
+    if (status === null || prioridade === null || tipo === null || ordenacao === null) {
+        mostrarErro("Um dos filtros está com valor inválido. Recarregue a página e tente de novo.");
         return;
     }
 
     const params = new URLSearchParams();
-    if (busca) params.append("busca", busca);
-    if (status) params.append("status", status);
-    if (prioridade) params.append("prioridade", prioridade);
-    if (tipo) params.append("tipo", tipo);
-
-    const responsavel = document.getElementById("filtroResponsavel").value;
-    const projeto = document.getElementById("filtroProjeto").value;
-    if (responsavel !== "todos") params.append("responsavel", responsavel);
-    if (projeto !== "todos") params.append("projeto", projeto);
-    params.append("ordenarPor", ordenarPor);
+    if (busca) params.set("busca", busca);
+    if (status) params.set("status", status);
+    if (prioridade) params.set("prioridade", prioridade);
+    if (tipo) params.set("tipo", tipo);
+    if (responsavel && responsavel !== "todos") params.set("responsavel", responsavel);
+    if (projeto && projeto !== "todos") params.set("projeto", projeto);
+    if (ordenacao) params.set("ordenarPor", ordenacao);
 
     try {
-        const resposta = await fetch(API_BASE_URL + "/demandas?" + params.toString());
+        const resposta = await fetch(API_BASE_URL + "/demandas?" + params.toString(), { credentials: "include" });
+
+        if (resposta.status === 401) {
+            window.location.href = "login.html";
+            return;
+        }
 
         if (!resposta.ok) {
-            const mensagem = await mensagemDaResposta(resposta, "Não foi possível listar as demandas");
+            const mensagem = await mensagemDaResposta(resposta, "Não foi possível consultar as demandas");
             mostrarErro(mensagem);
-            renderizarLista([], "A lista não foi atualizada por causa do erro acima.");
+            renderizarLista([], "Não foi possível carregar as demandas.");
             return;
         }
 
         const demandas = await resposta.json();
         if (!Array.isArray(demandas)) {
-            mostrarErro("A API não retornou a lista de demandas.");
-            renderizarLista([], "A lista não foi atualizada por causa do erro acima.");
+            mostrarErro("A API não retornou uma lista de demandas.");
+            renderizarLista([], "Não foi possível carregar as demandas.");
             return;
         }
 
@@ -261,7 +164,7 @@ async function carregarDemandas() {
         renderizarLista(demandas);
     } catch (erro) {
         mostrarErro("Não foi possível consultar as demandas. Verifique se a API está em execução.");
-        renderizarLista([], "A lista não foi atualizada por causa do erro acima.");
+        renderizarLista([], "Não foi possível carregar as demandas.");
     }
 }
 
@@ -272,9 +175,8 @@ function textoOu(valor, reserva) {
     return String(valor);
 }
 
-// Converte AAAA-MM-DD para o formato usado na tela.
 function formatarData(valor, reserva) {
-    if (valor === null || valor === undefined || String(valor).trim() === "") {
+    if (!valor) {
         return reserva;
     }
     const partes = String(valor).slice(0, 10).split("-");
@@ -357,8 +259,8 @@ function renderizarLista(demandas, avisoVazio) {
 // Preenche responsável e projeto com o que já está cadastrado no banco.
 async function carregarOpcoesFiltros() {
     try {
-        const respostaProjetos = await fetch(API_BASE_URL + "/projetos");
-        const respostaUsuarios = await fetch(API_BASE_URL + "/usuarios");
+        const respostaProjetos = await fetch(API_BASE_URL + "/projetos", { credentials: "include" });
+        const respostaUsuarios = await fetch(API_BASE_URL + "/usuarios", { credentials: "include" });
 
         if (!respostaProjetos.ok || !respostaUsuarios.ok) {
             const falha = !respostaProjetos.ok ? respostaProjetos : respostaUsuarios;
@@ -394,4 +296,3 @@ async function carregarOpcoesFiltros() {
         mostrarErro("Não foi possível carregar projetos e responsáveis. Verifique se a API está em execução.");
     }
 }
->>>>>>> Stashed changes

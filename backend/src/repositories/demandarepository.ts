@@ -7,10 +7,17 @@ DESCRIÇÃO: Lê as demandas no Oracle para a listagem, já com projeto e respon
 import { Demanda } from "../types/demanda";
 import { abrirConexao } from "../banco/conexao";
 
-export async function buscarTodasDemandas(): Promise<Demanda[]> {
+export interface UsuarioLogado {
+    id: number;
+    perfil: string;
+}
+
+export async function buscarTodasDemandas(usuario?: UsuarioLogado): Promise<Demanda[]> {
     const conexao = await abrirConexao();
 
     try {
+        const restringirPorProjeto = !!usuario && usuario.perfil !== "Administrador";
+
         const sql = `
             SELECT
                 d.id AS "id",
@@ -26,9 +33,11 @@ export async function buscarTodasDemandas(): Promise<Demanda[]> {
             FROM demanda d
             INNER JOIN projeto p ON d.projeto_id = p.id
             LEFT JOIN usuario u ON d.responsavel_id = u.id
+            ${restringirPorProjeto ? "INNER JOIN projeto_usuario pu ON pu.projeto_id = d.projeto_id AND pu.usuario_id = :usuarioId" : ""}
         `;
 
-        const resultado = await conexao.execute(sql);
+        const binds = restringirPorProjeto ? { usuarioId: usuario!.id } : {};
+        const resultado = await conexao.execute(sql, binds);
         return (resultado.rows ?? []) as Demanda[];
     } catch (erro) {
         console.error("Erro ao buscar demandas no banco:", erro);

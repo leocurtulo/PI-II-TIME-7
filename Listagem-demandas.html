@@ -37,7 +37,7 @@ com busca, filtros, ordenação e acesso aos detalhes de cada demanda.
             <a href="dashboard-demanda.html">Dashboard</a>
             <a href="Listagem-demandas.html">Demandas</a>
             <a href="cadastro-demanda.html">Nova Demanda</a>
-            <a href="login.html">Login</a>
+            <a href="#" id="linkSair">Sair</a>
         </nav>
     </header>
 
@@ -116,42 +116,8 @@ com busca, filtros, ordenação e acesso aos detalhes de cada demanda.
             </div>
         </div>
 
-<<<<<<< Updated upstream
-        <div id="lista" style="display: block;">
-
-            <!-- DEMANDA 1 -->
-            <div class="exemplo" data-status="Em andamento" data-prioridade="Média" data-tipo="Melhoria" data-responsavel="João Silva" data-projeto="Sistema RH" data-prazo="2026-09-20" data-criacao="2026-09-01" data-nivel-prioridade="2">
-                <h3>Atualização do sistema</h3>
-                <p class="descricao">Migrar o banco de dados e atualizar o framework principal.</p>
-                <hr style="border: 0; border-top: 1px solid #e5e7eb; margin: 15px 0;">
-                <p><strong>Projeto:</strong> Sistema RH | <strong>Tipo:</strong> Melhoria</p>
-                <p><strong>Responsável:</strong> João Silva</p>
-                <p><strong>Prazo:</strong> 20/09/2026</p>
-                <p><strong>Prioridade:</strong> Média</p>
-                <p><strong>Status:</strong> Em andamento</p>
-                <button
-    onclick="window.location.href='detalhes-demanda.html?id=1'"
-    style="margin-top: 15px;">
-    Ver detalhes
-</button>
-            </div>
-
-            <!-- DEMANDA 2 -->
-            <div class="exemplo" data-status="Pendente" data-prioridade="Alta" data-tipo="Bug" data-responsavel="Maria Santos" data-projeto="App Mobile" data-prazo="2026-09-25" data-criacao="2026-09-10" data-nivel-prioridade="1">
-                <h3>Correção de cadastro de usuários</h3>
-                <p class="descricao">Resolver bug na tela de login onde usuários não conseguem recuperar a senha.</p>
-                <hr style="border: 0; border-top: 1px solid #e5e7eb; margin: 15px 0;">
-                <p><strong>Projeto:</strong> App Mobile | <strong>Tipo:</strong> Bug (Erro)</p>
-                <p><strong>Responsável:</strong> Maria Santos</p>
-                <p><strong>Prazo:</strong> 25/09/2026</p>
-                <p><strong>Prioridade:</strong> Alta</p>
-                <p><strong>Status:</strong> Pendente</p>
-                <button onclick="window.location.href='detalhes-demanda.html'" style="margin-top: 15px;">Ver detalhes</button>
-            </div>
-=======
         <!-- Mensagem da API (400, 401, 404 ou falha de conexão), visível na tela. -->
         <p id="mensagemErro" class="mensagem-erro"></p>
->>>>>>> Stashed changes
 
         <!-- Preenchida pelo JavaScript com o retorno de GET /demandas. -->
         <div id="lista">
