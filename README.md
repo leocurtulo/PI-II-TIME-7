@@ -1,42 +1,61 @@
-# PI-II-TIME-7
+# Sistema de Acompanhamento de Demandas
 
-Integrantes
-  -Leonardo Furlan Curtulo
-  -Caio Ferreira Aragão
-  -Vitor Fachini Zanon
-  -Augusto Brufato Pereira dos Santos
-  -Vinicius Pansieri Chiarelli
+**Projeto Integrador II** – Engenharia de Software – PUC-Campinas
 
-Curso
-  -Engenharia de Software
+**Time:** PI-II-TIME-7 – 2º semestre do 1º ano
 
-Componente Curricular
-  -Projeto Integrador II
+**Professora orientadora:** Renata Antônia Tadeu Arantes
 
-Semestre/Ano
-  -2º semestre do 1º ano
+## Sobre o sistema
 
-Professora Orientadora
-  -Renata Antônia Tadeu Arantes
+Sistema web para cadastrar, acompanhar e atualizar demandas de projetos. Cada usuário entra com login e vê só o que o seu perfil permite:
 
+- **Administrador:** vê e altera as demandas de todos os projetos.
+- **Líder de Projeto:** cadastra e edita demandas dos projetos em que está vinculado.
+- **Membro da Equipe:** consulta as demandas dos seus projetos, comenta e acompanha o andamento.
 
-## API - Cadastro de Demanda (Leonardo Furlan Curtulo)
+Funcionalidades: login com sessão, dashboard, listagem com filtros e busca, cadastro de demanda (com bloqueio de prazo em feriado nacional via BrasilAPI), edição, alteração de status, cancelamento, comentários e histórico de alterações.
 
-Servidor em `backend/`. Para rodar: `cd backend` e `npm start` (porta 3000).
+## Equipe
 
-### GET /projetos
-Lista os projetos pré-cadastrados.
-- **200**: array com os projetos (`id` e `nome`)
+| Integrante | Parte principal |
+|---|---|
+| Leonardo Furlan Curtulo | Cadastro, edição, login com sessão e permissões por perfil |
+| Augusto Brufato Pereira dos Santos | Banco de dados Oracle, detalhes da demanda e comentários |
+| Vitor Fachini Zanon | Login e alteração de status |
+| Caio Ferreira Aragão | Listagem, filtros e busca |
+| Vinicius Pansieri Chiarelli | Dashboard |
 
-### POST /demandas
-Cadastra uma nova demanda.
+## Tecnologias
 
-**Campos obrigatórios:** `titulo`, `descricao`, `tipo` (Tarefa, Defeito, Melhoria ou Documentação), `prioridade` (Crítica, Alta, Média ou Baixa) e `projetoId` (precisa existir).
+- **Frontend:** HTML, CSS e JavaScript (fetch)
+- **Backend:** Node.js, TypeScript e Express (express-session)
+- **Banco de dados:** Oracle da PUC-Campinas
 
-**Campos opcionais:** `responsavelId` (se vier, precisa existir) e `prazo` (formato AAAA-MM-DD).
+## Como rodar
 
-**Gerados automaticamente:** `id`, `status` ("Aberta"), `dataCriacao` e `dataAtualizacao`.
+1. Conecte na **VPN da PUC-Campinas** (o banco Oracle só é acessível por ela).
+2. Na pasta `backend`, crie o arquivo `.env` seguindo o `.env.example` (`DB_USER`, `DB_PASSWORD`, `DB_CONNECT_STRING` e `SESSION_SECRET`). O `.env` **não** vai para o GitHub.
+3. Instale as dependências:
+   ```bash
+   cd backend
+   npm install
+   ```
+4. No banco, rode os scripts da pasta `backend/sql/` nesta ordem:
+   1. `criar-tabelas.sql`
+   2. `criar-tabelas-historico.sql`
+5. Inicie o servidor:
+   ```bash
+   npm start
+   ```
+6. Acesse **http://localhost:3000/login.html**
 
-**Respostas:**
-- **201**: demanda criada (retorna a demanda completa)
-- **400**: `{ "mensagem": "Dados inválidos.", "erros": [...] }`
+## Usuários para teste
+
+| Nome | Perfil | E-mail | Senha |
+|---|---|---|---|
+| Ana Souza | Administrador | ana@email.com | Senha@123 |
+| Leonardo Curtulo | Líder de Projeto | leocurtulo@gmail.com | leoCurtulo.23 |
+| Augusto Brufato | Membro da Equipe | augustobru@gmail.com | Augusto.00 |
+| Caio Aragão | Membro da Equipe | caioarg@gmail.com | @Aragao1 |
+
