@@ -65,6 +65,8 @@ const btnAlterarstatus =
 const btnCancelar =
     document.getElementById("btnCancelar");
 
+esconderBotoesMembro();
+
 btnEditar.addEventListener("click", () => {
 
     window.location.href =
@@ -381,4 +383,15 @@ async function carregarHistorico() {
 
     }
 
+}
+
+// Membro da Equipe não edita nem cancela, então esconde esses botões
+async function esconderBotoesMembro() {
+    const resposta = await fetch(API_BASE_URL + "/sessao");
+    const usuario = await resposta.json();
+
+    if (usuario.perfil === "Membro da Equipe") {
+        btnEditar.style.display = "none";
+        btnCancelar.style.display = "none";
+    }
 }
