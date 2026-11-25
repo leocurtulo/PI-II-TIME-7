@@ -1,6 +1,30 @@
 /*Autor: Augusto Brufato
 Descrição: Javascript dos detalhes das demandas
 */
+
+// Nomes dos campos do histórico do jeito que o usuário deve ler
+const NOMES_CAMPOS = {
+    titulo: "Título",
+    descricao: "Descrição",
+    tipo: "Tipo",
+    prioridade: "Prioridade",
+    status: "Status",
+    responsavel: "Responsável",
+    prazo: "Prazo"
+};
+
+// Deixa o valor legível: vazio vira "vazio" e o prazo vai de AAAA-MM-DD para DD/MM/AAAA
+function valorLegivel(campo, valor) {
+    if (valor == null || valor === "") {
+        return "vazio";
+    }
+    if (campo === "prazo") {
+        return valor.slice(8, 10) + "/" + valor.slice(5, 7) + "/" + valor.slice(0, 4);
+    }
+    return valor;
+}
+
+
 console.log("JavaScript carregado com sucesso!");
 const parametros =
     new URLSearchParams(window.location.search);
@@ -342,9 +366,9 @@ async function carregarHistorico() {
             lista.innerHTML += `
                 <li class="item-pesquisavel">
                     ${item.usuario}
-                    alterou ${item.campo}
-                    de "${item.valorAnterior}"
-                    para "${item.valorNovo}"
+                    alterou ${NOMES_CAMPOS[item.campo]}
+                    de "${valorLegivel(item.campo, item.valorAnterior)}"
+                    para "${valorLegivel(item.campo, item.valorNovo)}"
                     — ${data}
                 </li>
             `;
