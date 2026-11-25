@@ -2,6 +2,8 @@
 AUTOR: Leonardo Furlan Curtulo
 Descrição: CSS padrão do projeto, seguido por todas as telas do sistema. */
 
+
+/* Base: zera margens e define a fonte de todas as telas */
 * {
     box-sizing: border-box;
 }
@@ -16,6 +18,8 @@ body{
     
 }
 
+
+/* Cabeçalho e menu (iguais em todas as telas) */
 .cabecalho{
     background-color: #1E3A8A;
     padding: 16px 32px;
@@ -53,7 +57,7 @@ main{
 }
 
 
-
+/* Formulários: cadastro, edição e detalhes */
 .formulario {
     background-color: #ffffff;
     padding: 30px;
@@ -113,6 +117,7 @@ button:hover {
     background-color: #3749A3;
 }
 
+/* Tela de login */
 .login {
     background-color: #c9c9c9;
     padding: 40px;
@@ -172,6 +177,8 @@ button:hover {
     padding: 0 24px;
 }
 
+
+/* Dashboard: cards de resumo, painéis e tabela de prazos */
 .dashboard h2 {
     color: #1E3A8A;
     margin-bottom: 10px;
@@ -271,7 +278,7 @@ button:hover {
     margin-bottom: 35px;
 }
 
-
+/* Listagem de demandas (cards) */
 
 #lista {
     display: block !important;
@@ -297,7 +304,7 @@ button:hover {
 }
 
 
-
+/* Mensagens de erro e validação dos campos */
 .campo .campo-invalido{
     border-color: #DC2626;
     background-color: #FEF2F2;

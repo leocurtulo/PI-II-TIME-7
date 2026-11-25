@@ -13,13 +13,16 @@ DESCRIÇÃO: Tela responsável pela autenticação dos usuários do sistema.
 <body>
   <div class="login">
     <h2>Faça seu login</h2>
+    <!-- A validação e o envio do login (POST /login) são feitos pelo script.js -->
     <form id="formLogin">
       <label for="usuario">Usuário</label>
       <input type="text" id="usuario" name="usuario">
+      <!-- Os spans de erro ficam vazios e recebem a mensagem pelo JavaScript -->
       <span id="erroUsuario" class="mensagem-erro"></span>
 
       <label for="senha">Senha</label>
       <input type="password" id="senha" name="senha">
+      <!-- Requisitos da senha: ficam verdes enquanto o usuário digita (classes valido/invalido) -->
       <div class="requisitos-senha">
 
       <p id="req8" class="invalido"> Pelo menos 8 caracteres</p> 
