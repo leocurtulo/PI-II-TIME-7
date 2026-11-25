@@ -10,7 +10,7 @@ export function rotasDetalhesEComentarios(app: Express) {
    
     
 
-    
+    // lista os comentários da demanda, do mais novo para o mais antigo
     app.get("/demandas/:id/comentarios",exigirLogin, async (req, res) => {
 
         const id = Number(req.params.id);
@@ -18,7 +18,8 @@ export function rotasDetalhesEComentarios(app: Express) {
         try {
 
     const conexao = await abrirConexao();
-
+    
+    // Junta com a tabela usuario para mostrar o nome de quem comentou
     const resultado = await conexao.execute(
         `SELECT
             c.id AS "id",
@@ -48,6 +49,7 @@ export function rotasDetalhesEComentarios(app: Express) {
 }
     });
 
+    //lista as alterações feitas na demanda (gravadas pela edição e pelo status)
     app.get("/demandas/:id/historico",exigirLogin, async (req, res) => {
 
     const id = Number(req.params.id);
@@ -89,6 +91,7 @@ export function rotasDetalhesEComentarios(app: Express) {
 });
 
     
+    //salva um comentário feito pelo usuário logado
     app.post("/demandas/:id/comentarios", async (req, res) => {
 
         const id = Number(req.params.id);
@@ -102,6 +105,8 @@ export function rotasDetalhesEComentarios(app: Express) {
         return;
     }
 
+
+    // Comentário vazio não é aceito
     if (
         dados.texto === undefined ||
         String(dados.texto).trim() === ""

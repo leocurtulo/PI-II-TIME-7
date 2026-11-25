@@ -26,6 +26,7 @@ function valorLegivel(campo, valor) {
 
 
 console.log("JavaScript carregado com sucesso!");
+// Pega o id da demanda pela URL 
 const parametros =
     new URLSearchParams(window.location.search);
 
@@ -73,6 +74,8 @@ btnEditar.addEventListener("click", () => {
         `edicao-demanda.html?id=${idDemanda}`;
 
 });
+
+// Altera para o status escolhido no select e recarrega a demanda e o histórico
 btnAlterarstatus.addEventListener(
     "click",
     async () => {
@@ -107,6 +110,7 @@ btnAlterarstatus.addEventListener(
     }
 );
 
+// Cancelar pede confirmação antes, porque demanda cancelada não pode mais ser editada
 btnCancelar.addEventListener(
     "click",
     async () => {
@@ -141,6 +145,8 @@ btnCancelar.addEventListener(
 
     }
 );
+
+// Valida o comentário (obrigatório e com pelo menos 10 caracteres) antes de enviar
 btnComentario.addEventListener("click",async () => {
 
     erroComentario.textContent = "";
@@ -200,6 +206,8 @@ const campoBusca =
 const erroBusca =
     document.getElementById("erroBusca");
 
+
+// Busca: destaca em verde os comentários e itens do histórico que têm o termo digitado
 btnBusca.addEventListener("click", () => {
 
     erroBusca.textContent = "";
@@ -246,6 +254,8 @@ btnBusca.addEventListener("click", () => {
 
 });
 
+
+// Busca a demanda na API e preenche cada campo da tela
 async function carregarDemanda() {
 
     try {
@@ -300,6 +310,8 @@ async function carregarDemanda() {
 
 }
 
+
+// Monta a lista de comentários com o nome de quem comentou
 async function carregarComentarios() {
 
     try {
@@ -345,6 +357,8 @@ async function carregarComentarios() {
     }
 
 }
+
+// Monta a lista do histórico de alterações
 async function carregarHistorico() {
 
     try {
