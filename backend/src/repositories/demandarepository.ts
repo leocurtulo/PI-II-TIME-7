@@ -16,8 +16,11 @@ export async function buscarTodasDemandas(usuario?: UsuarioLogado): Promise<Dema
     const conexao = await abrirConexao();
 
     try {
+
+        // Só o Administrador vê todas; os outros só veem as dos projetos em que estão vinculados (JOIN com projeto_usuario)
         const restringirPorProjeto = !!usuario && usuario.perfil !== "Administrador";
 
+        // LEFT JOIN no usuario porque a demanda pode estar sem responsável
         const sql = `
             SELECT
                 d.id AS "id",
@@ -36,12 +39,15 @@ export async function buscarTodasDemandas(usuario?: UsuarioLogado): Promise<Dema
             ${restringirPorProjeto ? "INNER JOIN projeto_usuario pu ON pu.projeto_id = d.projeto_id AND pu.usuario_id = :usuarioId" : ""}
         `;
 
+        // O :usuarioId só é enviado quando o SQL tem o filtro por projeto
         const binds = restringirPorProjeto ? { usuarioId: usuario!.id } : {};
         const resultado = await conexao.execute(sql, binds);
         return (resultado.rows ?? []) as Demanda[];
     } catch (erro) {
         console.error("Erro ao buscar demandas no banco:", erro);
         throw erro;
+      
+    // Fecha a conexão mesmo se der erro
     } finally {
         await conexao.close();
     }

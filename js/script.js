@@ -1,6 +1,8 @@
 // AUTOR: Vitor Fachini Zanon
 // DESCRIÇÃO: Validação e autenticação da tela de login
 
+
+// Elementos do formulário de login
 const formulario = document.getElementById("formLogin");
 const usuario = document.getElementById("usuario");
 const senha = document.getElementById("senha");
@@ -29,6 +31,7 @@ senha.addEventListener("input", function () {
             : "invalido";
 });
 
+// Ao enviar: valida e-mail e senha e, se estiver tudo certo, faz o login na API
 formulario.addEventListener("submit", async function (event) {
     event.preventDefault();
 
@@ -69,6 +72,7 @@ formulario.addEventListener("submit", async function (event) {
         return;
     }
 
+    // Envia e-mail e senha para o POST /login; se der certo, o servidor cria a sessão
     try {
         const resposta = await fetch("http://localhost:3000/login", {
             method: "POST",

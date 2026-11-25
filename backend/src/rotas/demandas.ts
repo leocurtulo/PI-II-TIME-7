@@ -9,8 +9,12 @@ import { exigirLogin } from "./autenticacao";
 import { listarDemandas } from "../servicos/servicodemanda";
 
 export function rotasListagem(app: Express) {
+
+    // Mesma função atende as duas rotas lá embaixo
     const handler = async (req: Request, res: Response) => {
         try {
+
+            // Lê os filtros que vieram na URL (ex.: /demandas?status=Aberta&prioridade=Alta)
             const filtros = {
                 status: req.query.status as string,
                 prioridade: req.query.prioridade as string,
@@ -21,6 +25,7 @@ export function rotasListagem(app: Express) {
                 ordenarPor: req.query.ordenarPor as string
             };
 
+            // O perfil do usuário logado decide quais demandas ele pode ver
             const usuario = req.session.usuario!;
             const demandas = await listarDemandas(filtros, usuario);
 
