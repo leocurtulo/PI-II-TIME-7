@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!-- Autor: Leonardo Furlan Curtulo
-Descrição: tela de edição de demanda. Carrega a demanda pelo id da URL (editar-demanda.html?id=5)
+Descrição: tela de edição de demanda. Carrega a demanda pelo id da URL
 e permite alterar só os campos editáveis. -->
 
 <html lang="pt-BR">
@@ -9,6 +9,7 @@ e permite alterar só os campos editáveis. -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editar demanda - Sistema de acompanhamento de Demandas</title>
     <link rel="stylesheet" href="style.css">
+    <!-- A ordem importa: api.js (funções do fetch) antes do sessao.js e do JS da tela -->
     <script src="js/api.js" defer></script>
     <script src="js/sessao.js" defer></script>
     <script src="js/edicao-demanda.js" defer></script>
@@ -16,7 +17,8 @@ e permite alterar só os campos editáveis. -->
 <body>
 
     <header class="cabecalho">
-        <h2>Sistema de Demandas</h2>
+        <h2>Sistema de Acompanhamento de Demandas</h2>
+        <!-- Menu igual em todas as telas; o nome do usuário e o botão Sair são preenchidos pelo sessao.js -->
         <nav class="menu">
             <a href="dashboard-demanda.html">Dashboard</a>
             <a href="Listagem-demandas.html">Demandas</a>
@@ -29,9 +31,10 @@ e permite alterar só os campos editáveis. -->
     <main>
         <h1 class="titulo">Editar demanda</h1>
         <p>Altere os dados abaixo e clique em salvar.</p>
-
+        <!-- novalidate: quem valida é o edicao-demanda.js, mostrando o erro embaixo de cada campo -->
         <form id="formEdicao" class="formulario" novalidate>
 
+            <!-- Campos só de leitura (disabled): número, projeto e status não mudam na edição -->
             <div class="campo">
                 <label for="id">Nº da demanda</label>
                 <input type="text" id="id" name="id" disabled>

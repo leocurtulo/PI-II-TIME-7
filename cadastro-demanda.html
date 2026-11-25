@@ -8,6 +8,7 @@ Descrição: tela de cadastro de demandas. -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nova demanda - Sistema de acompanhamento de Demandas</title>
     <link rel="stylesheet" href="style.css">
+    <!-- A ordem importa: api.js (funções do fetch) antes do sessao.js e do JS da tela -->
     <script src="js/api.js" defer></script>
     <script src="js/sessao.js" defer></script>
     <script src="js/cadastro-demanda.js" defer></script>
@@ -16,6 +17,7 @@ Descrição: tela de cadastro de demandas. -->
 
     <header class="cabecalho">
         <h2>Sistema de Acompanhamento de Demandas</h2>
+        <!-- Menu igual em todas as telas; o nome do usuário e o botão Sair são preenchidos pelo sessao.js -->
         <nav class="menu">
             <a href="dashboard-demanda.html">Dashboard</a>
             <a href="Listagem-demandas.html">Demandas</a>
@@ -29,7 +31,7 @@ Descrição: tela de cadastro de demandas. -->
         <h1 class="titulo">Cadastrar nova demanda</h1>
         <p>Preencha os dados abaixo para registrar uma nova demanda.</p>
 
-
+        <!-- novalidate: quem valida é o cadastro-demanda.js, mostrando o erro embaixo de cada campo -->
         <form id="formDemanda" class="formulario" novalidate>
             <div class="campo">
                 <label for="titulo">Título</label>
@@ -68,7 +70,7 @@ Descrição: tela de cadastro de demandas. -->
                 </select>
                 <span id="erroPrioridade" class="mensagem-erro"></span>
             </div>
-            
+            <!-- Projetos e responsáveis vêm da API (GET /projetos e GET /usuarios) -->
             <div class="campo">
                 <label for="projeto">Projeto associado</label>
                 <select id="projeto" name="projeto" required>

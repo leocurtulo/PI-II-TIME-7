@@ -14,9 +14,11 @@
     <header class="cabecalho">
         <h2>Sistema de Acompanhamento de Demandas</h2>
 
+        <!-- Menu igual em todas as telas; o nome do usuário e o botão Sair são preenchidos pelo sessao.js -->
         <nav class="menu">
             <a href="dashboard-demanda.html">Dashboard</a>
-            <a href="Listagem-demandas.html">Nova Demanda</a>
+            <a href="Listagem-demandas.html">Demandas</a>
+            <a href="cadastro-demanda.html">Nova Demanda</a>
             <span id="usuarioLogado"></span>
             <button id="botaoSair" type="button">Sair</button>
         </nav>
@@ -26,6 +28,7 @@
 
         <h1 class="titulo">Detalhes da Demanda</h1>
 
+        <!-- Os campos vêm vazios e são preenchidos pelo detalhes-demanda.js com os dados da API -->
         <section class="formulario">
 
             <h2>Informações da Demanda</h2>
@@ -82,6 +85,7 @@
 
         </section>
 
+        
         <section class="formulario">
 
             <h2>Descrição</h2>
@@ -110,7 +114,7 @@
 
 </section>
 
-
+<!-- Comentários e histórico são carregados da API e montados pelo detalhes-demanda.js -->
         <section class="formulario">
 
     <h2>Comentários</h2>
@@ -152,7 +156,7 @@
             </ul>
 
         </section>
-
+        <!-- O backend confere se a mudança de status segue o ciclo de vida e o perfil do usuário -->
         <section class="formulario">
 
             <h2>Alterar Status</h2>
@@ -174,6 +178,7 @@
 
         </section>
 
+        <!-- Editar e Cancelar ficam escondidos para o Membro da Equipe -->
         <section class="formulario">
 
             <button id="btnEditar">
