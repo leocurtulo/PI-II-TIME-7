@@ -3,6 +3,7 @@
 
 import { Express } from "express";
 import { abrirConexao } from "../banco/conexao";
+import { exigirLogin } from "./autenticacao";
 
 export function rotasDetalhesEComentarios(app: Express) {
 
@@ -10,7 +11,7 @@ export function rotasDetalhesEComentarios(app: Express) {
     
 
     
-    app.get("/demandas/:id/comentarios", async (req, res) => {
+    app.get("/demandas/:id/comentarios",exigirLogin, async (req, res) => {
 
         const id = Number(req.params.id);
 
@@ -47,7 +48,7 @@ export function rotasDetalhesEComentarios(app: Express) {
 }
     });
 
-    app.get("/demandas/:id/historico", async (req, res) => {
+    app.get("/demandas/:id/historico",exigirLogin, async (req, res) => {
 
     const id = Number(req.params.id);
 

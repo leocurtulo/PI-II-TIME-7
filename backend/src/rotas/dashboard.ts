@@ -3,11 +3,12 @@
 
 import { Express } from "express";
 import { abrirConexao } from "../banco/conexao";
+import { exigirLogin } from "./autenticacao";
 
 export function rotasDashboard(app: Express) {
 
     // GET /dashboard: devolve as demandas para a tela calcular os totais
-    app.get("/dashboard", async (req, res) => {
+    app.get("/dashboard",exigirLogin, async (req, res) => {
         try {
             const conexao = await abrirConexao();
 
